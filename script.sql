@@ -59,16 +59,7 @@ CREATE TABLE WritesContract1(
 	compensation		INT		NOT NULL
 );
 
-CREATE TABLE WritesContract2(
-	contractID		VARCHAR2(50) 	PRIMARY KEY,
-	type			VARCHAR2(50) 	NOT NULL,
-	stageName		VARCHAR2(50) 	UNIQUE NOT NULL,
-	labelName		VARCHAR2(50) 	NOT NULL,
-	startDate 		DATE		NOT NULL,
-	endDate			DATE,		
-	FOREIGN KEY (labelName) REFERENCES RecordLabel(labelName) ON DELETE CASCADE,
-	FOREIGN KEY (type) REFERENCES WritesContract1 (type) 
-);
+
 
 CREATE TABLE AwardShow(
 	showVenue		VARCHAR2(50) ,	
@@ -88,6 +79,17 @@ CREATE TABLE ArtistSigns2(
 	stageName 		VARCHAR2(50) 	PRIMARY KEY,
 	legalName 		VARCHAR2(50) 	NOT NULL,
 	FOREIGN KEY (legalName) REFERENCES ArtistSigns1 (legalName)
+);
+
+CREATE TABLE WritesContract2(
+	contractID		VARCHAR2(50) 	PRIMARY KEY,
+	type			VARCHAR2(50) 	NOT NULL,
+	stageName		VARCHAR2(50) 	UNIQUE NOT NULL,
+	labelName		VARCHAR2(50) 	NOT NULL,
+	startDate 		DATE		NOT NULL,
+	endDate			DATE,		
+	FOREIGN KEY (labelName) REFERENCES RecordLabel(labelName) ON DELETE CASCADE,
+	FOREIGN KEY (type) REFERENCES WritesContract1 (type) 
 );
 
 CREATE TABLE MusicProfessional(
@@ -258,6 +260,8 @@ INSERT INTO EmploysEmployee1 VALUES ('Marketing Specialist', 'Marketing');
 INSERT INTO EmploysEmployee1 VALUES ('Sales Manager', 'Sales');
 INSERT INTO EmploysEmployee1 VALUES ('Social Media Manager', 'Marketing');
 
+INSERT INTO WritesContract2 VALUES ('2', 'monthly', 'jisoo', 'yg', TO_DATE('2021-06-12', 'YYYY-MM-DD'), TO_DATE('2024-06-12', 'YYYY-MM-DD'));
+
 INSERT INTO EmploysEmployee2 VALUES (TO_DATE('2021-06-12', 'YYYY-MM-DD'), 55000);
 INSERT INTO EmploysEmployee2 VALUES (TO_DATE('2019-05-30', 'YYYY-MM-DD'), 72000);
 INSERT INTO EmploysEmployee2 VALUES (TO_DATE('2020-11-21', 'YYYY-MM-DD'), 60000);
@@ -320,7 +324,7 @@ INSERT INTO WritesContract2 VALUES ('C106', 'Tour Support', 'Sabrina Carpenter',
 
 INSERT INTO ArtistSigns1 VALUES ('Taylor Swift', TO_DATE('1989-12-13', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Ariana Grande-Butera', TO_DATE('1993-06-26', 'YYYY-MM-DD'));
-INSERT INTO ArtistSigns1 VALUES ('Peter Hernandez', TO_DATE('1985-10-08', 'YYYY-MM-DD'));
+INSERT INTO ArtistSigns1 VALUES ('Peters Hernandez', TO_DATE('1985-10-08', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Stefani Germanotta', TO_DATE('1986-03-28', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Billie OConnell', TO_DATE('2001-12-18', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Sabrina Carpenter', TO_DATE('1999-05-11', 'YYYY-MM-DD'));

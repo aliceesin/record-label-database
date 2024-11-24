@@ -85,15 +85,9 @@ async function fetchDemotableFromDb() {
     });
 }
 
-async function fetchHireDateFromDb() {
+async function fetchWritesContractTable() {
     return await withOracleDB(async (connection) => {
-        const query = `
-            SELECT e3.employeeName
-            FROM employsemployee3 e3
-            JOIN employsemployee2 e2
-            ON e3.hireDate = e2.hireDate
-            WHERE e2.salary > 40000
-            `;
+        const query = 'SELECT * FROM WritesContract2';
         const result = await connection.execute(query);
         return result.rows;
     }).catch(() => {
@@ -191,7 +185,7 @@ async function initiateDemotable() {
             // create all tables
             await createTables();
             console.log('All creates completed');
-            
+
             return true;
         } catch (error) {
             console.error('Error during table initialization:', error);
@@ -369,8 +363,14 @@ async function insertDemotable(legalName, dateOfBirth, stageName) {
 
 async function updateWritesContract(key, oldValue, newValue) {
     return await withOracleDB(async (connection) => {
+        console.log("key", key);
+        console.log("old", oldValue);
+        console.log("new", newValue);
+ 
         const result = await connection.execute(
-            `UPDATE WritesContract2 SET ${key}=:newValue where ${key}=:oldValue`,
+            `UPDATE WritesContract2 
+             SET ${key} = TO_DATE(:newValue, 'YYYY-MM-DD') 
+             WHERE ${key} = TO_DATE(:oldValue, 'YYYY-MM-DD')`,
             [newValue, oldValue],
             { autoCommit: true }
         );
@@ -393,7 +393,7 @@ async function countDemotable() {
 module.exports = {
     testOracleConnection,
     fetchDemotableFromDb,
-    fetchHireDateFromDb,
+    fetchWritesContractTable,
     initiateDemotable, 
     insertDemotable, 
     insertWritesContract,

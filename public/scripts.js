@@ -44,9 +44,12 @@ async function fetchAndDisplayUsers() {
     const response = await fetch('/demotable', {
         method: 'GET'
     });
+    console.log("response", response);
 
     const responseData = await response.json();
+    console.log("responseData", responseData);
     const demotableContent = responseData.data;
+    console.log("demo content", demotableContent);
 
     // Always clear old, already fetched data before new fetching process.
     if (tableBody) {
@@ -54,6 +57,33 @@ async function fetchAndDisplayUsers() {
     }
 
     demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+    
+}
+
+// fetch writescontract table
+async function fetchAndDisplayContract() {
+    const tableElement = document.getElementById('writescontracttable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/write-table', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const contractContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    contractContent.forEach(user => {
         const row = tableBody.insertRow();
         user.forEach((field, index) => {
             const cell = row.insertCell(index);
@@ -85,6 +115,7 @@ async function insertDemotable(event) {
     const legalNameValue = document.getElementById('legalName').value;
     const dateOfBirthValue = document.getElementById('dateOfBirth').value;
     const stageNameValue = document.getElementById('stageName').value;
+    console.log("dateofb", dateOfBirthValue);
     
     const response = await fetch('/insert-demotable', {
         method: 'POST',
@@ -180,6 +211,7 @@ async function insertWritesContract(event) {
         messageElement.textContent = "Data inserted successfully!";
         fetchTableData();
     } else {
+        alert("Need to first add artist information!");
         messageElement.textContent = "Error inserting data!" + responseData.messageElement;
     }
 }
@@ -188,10 +220,11 @@ async function insertWritesContract(event) {
 async function updateWritesContract(event) {
     event.preventDefault();
 
-    const keyValue = document.getElementById('updateKey').value;
+    const keyValue = document.querySelector('select[name="updateKeys"]').value;
     const oldValue = document.getElementById('oldValue').value;
     const newValue = document.getElementById('newValue').value;
 
+    
     const response = await fetch('/update-writescontract', {
         method: 'POST',
         headers: {
@@ -254,4 +287,6 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     fetchAndDisplayUsers();
+    fetchAndDisplayContract();
+
 }

@@ -20,6 +20,11 @@ router.get('/demotable', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/write-table', async (req, res) => {
+    const tableContent = await appService.fetchWritesContractTable();
+    res.json({data: tableContent});
+});
+
 router.get('/hiredate', async (req, res) => {
     const tableContent = await appService.fetchHireDateFromDb();
     res.json({data: tableContent});
@@ -85,6 +90,7 @@ router.post("/insert-writescontract", async (req, res) => {
 router.post("/update-writescontract", async (req, res) => {
     const { key, oldValue, newValue } = req.body;
     const updateResult = await appService.updateWritesContract(key, oldValue, newValue);
+    console.log("update result", updateResult);
     if (updateResult) {
         res.json({ success: true });
     } else {
