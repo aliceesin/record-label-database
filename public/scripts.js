@@ -82,32 +82,20 @@ async function resetDemotable() {
 async function insertDemotable(event) {
     event.preventDefault();
 
-    const idValue = document.getElementById('insertId').value;
-    const nameValue = document.getElementById('insertName').value;
-    const sinValue = document.getElementById('sinValue').value;
-    const hireDateValue = document.getElementById('hireDate').value;
-    const labelNameValue = document.getElementById('labelName').value;
-    const roleValue = document.getElementById('roleValue').value;
-    const deptValue = document.getElementById('deptValue').value;
-    const salaryValue = document.getElementById('salaryValue').value;
-
-    console.log("idValue", idValue);
-    console.log("role", roleValue);
-    console.log("salary", salaryValue);
+    const legalNameValue = document.getElementById('legalName').value;
+    const dateOfBirthValue = document.getElementById('dateOfBirth').value;
+    const stageNameValue = document.getElementById('stageName').value;
+    
     const response = await fetch('/insert-demotable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: idValue,
-            name: nameValue,
-            SIN: sinValue,
-            hireDate: hireDateValue,
-            labelName: labelNameValue,
-            role: roleValue,
-            dept: deptValue,
-            salary: salaryValue
+            legalName: legalNameValue,
+            dateOfBirth: dateOfBirthValue,
+            stageName: stageNameValue
+            
         })
     });
     console.log("response", response);
@@ -124,21 +112,95 @@ async function insertDemotable(event) {
     }
 }
 
-// Updates names in the demotable.
-async function updateNameDemotable(event) {
+async function insertRecordLabel(event) {
     event.preventDefault();
 
-    const oldNameValue = document.getElementById('updateOldName').value;
-    const newNameValue = document.getElementById('updateNewName').value;
-
-    const response = await fetch('/update-name-demotable', {
+    const labelName = document.getElementById('labelName').value;
+    const yearEstablished = document.getElementById('yearEstablished').value;
+    
+    const response = await fetch('/insert-recordlabel', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            oldName: oldNameValue,
-            newName: newNameValue
+            labelName: labelName,
+            yearEstablished: yearEstablished,
+            
+        })
+    });
+    console.log("response", response);
+
+    const responseData = await response.json();
+    console.log("responseData", responseData);
+    const messageElement = document.getElementById('insertResultMsg');
+
+    if (responseData.success) {
+        messageElement.textContent = "Data inserted successfully!";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "Error inserting data!" + responseData.messageElement;
+    }
+}
+
+
+async function insertWritesContract(event) {
+    event.preventDefault();
+    const type = document.getElementById('type').value;
+    const compensation = document.getElementById('compensation').value;
+    const contractID = document.getElementById('contractID').value;
+    const stageName = document.getElementById('stageName-w').value;
+    const labelName = document.getElementById('labelName-w').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    const response = await fetch('/insert-writescontract', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            type: type,
+            compensation: compensation,
+            contractID: contractID,
+            stageName: stageName,
+            labelName: labelName,
+            startDate: startDate,
+            endDate: endDate
+        
+        })
+    });
+    console.log("response", response);
+
+    const responseData = await response.json();
+    console.log("responseData", responseData);
+    const messageElement = document.getElementById('insertResultMsg');
+
+    if (responseData.success) {
+        messageElement.textContent = "Data inserted successfully!";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "Error inserting data!" + responseData.messageElement;
+    }
+}
+
+// Updates values in the writes contract table.
+async function updateWritesContract(event) {
+    event.preventDefault();
+
+    const keyValue = document.getElementById('updateKey').value;
+    const oldValue = document.getElementById('oldValue').value;
+    const newValue = document.getElementById('newValue').value;
+
+    const response = await fetch('/update-writescontract', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            key: keyValue,
+            oldValue: oldValue,
+            newValue: newValue
         })
     });
 
@@ -146,10 +208,10 @@ async function updateNameDemotable(event) {
     const messageElement = document.getElementById('updateNameResultMsg');
 
     if (responseData.success) {
-        messageElement.textContent = "Name updated successfully!";
+        messageElement.textContent = "Values updated successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error updating name!";
+        messageElement.textContent = "Error updating values!";
     }
 }
 
@@ -180,8 +242,12 @@ window.onload = function() {
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
-    document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("updateWritesContract").addEventListener("submit", updateWritesContract);
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    document.getElementById("insertRecordLabel").addEventListener("submit", insertRecordLabel);
+    document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
+
+
 };
 
 // General function to refresh the displayed table data. 

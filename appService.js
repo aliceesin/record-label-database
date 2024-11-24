@@ -78,7 +78,7 @@ async function testOracleConnection() {
 
 async function fetchDemotableFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM EmploysEmployee3');
+        const result = await connection.execute('SELECT * FROM ArtistSigns1');
         return result.rows;
     }).catch(() => {
         return [];
@@ -101,158 +101,277 @@ async function fetchHireDateFromDb() {
     });
 }
 
-
-
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
-        try {
-            await connection.execute(`DROP TABLE EmploysEmployee3`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
+        const dropTables = async () => {
+            const dropStatements = [
+                'DROP TABLE ArtistSigns1 CASCADE CONSTRAINTS',
+                'DROP TABLE ArtistSigns2 CASCADE CONSTRAINTS',
+                'DROP TABLE RecordLabel CASCADE CONSTRAINTS',
+                'DROP TABLE WritesContract1 CASCADE CONSTRAINTS',
+                'DROP TABLE WritesContract2 CASCADE CONSTRAINTS'
+            ];
+            
+            for (const statement of dropStatements) {
+                try {
+                    await connection.execute(statement);
+                    console.log(`Table dropped successfully with: ${statement}`);
+                } catch (err) {
+                    if (err.errorNum === 942) {
+                        console.log(`Table from statement "${statement}" might not exist, proceeding...`);
+                    } else {
+                        console.error(`Error executing "${statement}":`, err);
+                    }
+                }
+            }
+        };
 
-        const result = await connection.execute(`
-            CREATE TABLE EmploysEmployee3
-            (
-                employeeID   VARCHAR2(50) PRIMARY KEY,
-                employeeName VARCHAR2(50)        NOT NULL,
-                SIN          VARCHAR2(50) UNIQUE NOT NULL,
-                hireDate     DATE                NOT NULL,
-                labelName    VARCHAR2(50)        NOT NULL,
-                role         VARCHAR2(50)        NOT NULL,
-                FOREIGN KEY (labelName) REFERENCES RecordLabel(labelName) ON DELETE CASCADE,
-                FOREIGN KEY (hireDate) REFERENCES EmploysEmployee2 (hireDate),
-                FOREIGN KEY (role) REFERENCES EmploysEmployee1 (role)
+        const createTables = async () => {
+            try {
+                // create tables in the right order
+                await connection.execute(`
+                    CREATE TABLE RecordLabel(
+                        labelName       VARCHAR2(50) PRIMARY KEY,
+                        yearEstablished INT
+                    )
+                `);
+        
+                await connection.execute(`
+                    CREATE TABLE WritesContract1(
+                        type            VARCHAR2(50) PRIMARY KEY,
+                        compensation    INT NOT NULL
+                    )
+                `);
+        
+                await connection.execute(`
+                    CREATE TABLE ArtistSigns1(
+                        legalName       VARCHAR2(50) PRIMARY KEY,
+                        dateOfBirth     DATE NOT NULL
+                    )
+                `);
+                console.log('ArtistSigns1 table created');
+        
+                await connection.execute(`
+                    CREATE TABLE ArtistSigns2(
+                        stageName       VARCHAR2(50) PRIMARY KEY,
+                        legalName       VARCHAR2(50) NOT NULL,
+                        FOREIGN KEY (legalName) REFERENCES ArtistSigns1 (legalName)
+                    )
+                `);
+        
+                await connection.execute(`
+                    CREATE TABLE WritesContract2(
+                        contractID      VARCHAR2(50) PRIMARY KEY,
+                        type            VARCHAR2(50) NOT NULL,
+                        stageName       VARCHAR2(50) UNIQUE NOT NULL,
+                        labelName       VARCHAR2(50) NOT NULL,
+                        startDate       DATE NOT NULL,
+                        endDate         DATE,
+                        FOREIGN KEY (labelName) REFERENCES RecordLabel(labelName) ON DELETE CASCADE,
+                        FOREIGN KEY (stageName) REFERENCES ArtistSigns2(stageName),
+                        FOREIGN KEY (type) REFERENCES WritesContract1 (type)
+                    )
+                `);
+
                 
-            )
-        `);
-        return true;
-    }).catch(() => {
+                console.log('WritesContract2 table created');
+            } catch (error) {
+                console.error('Error in createTables:', error);
+                throw error;
+            }
+        };
+
+        try {
+            console.log('Starting table initialization...');
+            
+            // drop all tables
+            await dropTables();
+            console.log('All drops completed');
+            
+            // create all tables
+            await createTables();
+            console.log('All creates completed');
+            
+            return true;
+        } catch (error) {
+            console.error('Error during table initialization:', error);
+            throw error;
+        }
+    }).catch((error) => {
+        console.error('Database operation failed:', error);
         return false;
     });
 }
 
-async function initiateEmployee2Table() {
+async function insertArtist1(legalName, dateOfBirth) {
     return await withOracleDB(async (connection) => {
         try {
-            await connection.execute(`DROP TABLE EmploysEmployee2`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
 
-        const result = await connection.execute(`
-            CREATE TABLE EmploysEmployee2
-            (
-                hireDate DATE PRIMARY KEY,
-                salary   INT NOT NULL
-            )
-        `);
-        return true;
-    }).catch(() => {
-        return false;
+            const insertResult = await connection.execute(
+                `INSERT INTO ArtistSigns1 (legalName, dateofBirth) VALUES (:legalName, TO_DATE(:dateOfBirth, 'YYYY-MM-DD'))`,
+                { legalName: legalName, dateOfBirth: dateOfBirth },
+                { autoCommit: true }
+            );
+            console.log(`Successfully inserted into Artist1`);
+            return insertResult.rowsAffected > 0;
+        } catch (error) {
+            console.error('Error in Artist1:', error);
+            throw error;
+        }
     });
 }
 
-async function initiateEmployee1Table() {
+async function insertArtist2(stageName, legalName) {
     return await withOracleDB(async (connection) => {
         try {
-            await connection.execute(`DROP TABLE EmploysEmployee1`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
+            
+            const insertResult = await connection.execute(
+                `INSERT INTO ArtistSigns2 (stageName, legalName) VALUES (:stageName, :legalName)`,
+                { stageName: stageName, legalName: legalName },
+                { autoCommit: true }
+            );
+            console.log(`Successfully inserted into Artist2`);
+            return insertResult.rowsAffected > 0;
+        } catch (error) {
+            console.error('Error in insertArtist2:', error);
+            throw error;
         }
-
-        const result = await connection.execute(`
-            CREATE TABLE EmploysEmployee1(
-                role 			VARCHAR2(50) 	PRIMARY KEY,
-                dept			VARCHAR2(50) 	NOT NULL
-                )
-        `);
-        return true;
-    }).catch(() => {
-        return false;
     });
 }
 
-async function insertDemotable(employeeID, employeeName, sin, hireDate, labelName, role, dept, salary) {
+async function insertRecordLabel(labelName, yearEstablished) {
+    return await withOracleDB(async (connection) => {
+        try {
+            return await withOracleDB(async (connection) => {
+                try {
+                    const checkResult = await connection.execute(
+                        `SELECT COUNT(*) AS count FROM RecordLabel WHERE labelName = :labelName`,
+                        { labelName: labelName }
+                    );
+                    const row = checkResult.rows[0];
+                    console.log("row", row);
+                    if (row[0] > 0) {
+                        console.log(`RecordLabel with labelName ${labelName} already exists.`);
+                    } else {
+                        const insertResult = await connection.execute(
+                            `INSERT INTO RecordLabel (labelName, yearEstablished) VALUES (:labelName, :yearEstablished)`,
+                            { labelName: labelName, yearEstablished: yearEstablished },
+                            { autoCommit: true }
+                        );
+                        
+                        console.log(`Successfully inserted into RecordLabel`);
+                        return insertResult.rowsAffected > 0;
+                    }
+                    return true; 
+                } catch (error) {
+                    console.error('Error in RecordLabel:', error);
+                    throw error;
+                }
+            });
+            
+
+        } catch (error) {
+            console.error('Error in RecordLabel:', error);
+            throw error;
+        }
+    });
+}
+
+async function insertWritesContract1 (type, compensation) {
+    return await withOracleDB(async (connection) => {
+        try {
+            
+            const insertResult = await connection.execute(
+                `INSERT INTO WritesContract1 (type, compensation) VALUES (:type, :compensation)`,
+                { type: type, compensation: compensation },
+                { autoCommit: true }
+            );
+            console.log(`Successfully inserted into WritesContract1`);
+            return insertResult.rowsAffected > 0;
+        } catch (error) {
+            console.error('Error in WritesContract1:', error);
+            throw error;
+        }
+    });
+}
+
+async function insertWritesContract2 (contractID, type, stageName, labelName, startDate, endDate) {
+    return await withOracleDB(async (connection) => {
+        try {
+            
+            const insertResult = await connection.execute(
+                `INSERT INTO WritesContract2 (contractID, type, stageName, labelName, startDate, endDate) 
+                VALUES (:contractID, :type, :stageName, :labelName, TO_DATE(:startDate, 'YYYY-MM-DD'), TO_DATE(:endDate, 'YYYY-MM-DD'))`,
+                { contractID: contractID, 
+                    type: type,
+                    stageName: stageName,
+                    labelName: labelName,
+                    startDate: startDate,
+                    endDate: endDate
+                 },
+                { autoCommit: true }
+            );
+            console.log(`Successfully inserted into WritesContract2`);
+            return insertResult.rowsAffected > 0;
+        } catch (error) {
+            console.error('Error in WritesContract2:', error);
+            throw error;
+        }
+    });
+}
+
+async function insertWritesContract (type, compensation, contractID, stageName, labelName, startDate, endDate) {
     try {
         console.log('Inserting into tables...');
-        const employeeInsertResult = await insertEmployeeTables(employeeID, employeeName, sin, hireDate, labelName, role, dept, salary);
-        if (!employeeInsertResult) {
-            throw new Error("Failed to insert into Employee tables.");
+    
+
+        const e1InsertResult = await insertWritesContract1(type, compensation);
+        if (!e1InsertResult) {
+            throw new Error("Failed to insert into EmploysEmployee1.");
         }
 
-        // insert into EmploysEmployee3
-        const result = await withOracleDB(async (connection) => {
-            const insertResult = await connection.execute(
-                `INSERT INTO EmploysEmployee3 (employeeID, employeeName, sin, hireDate, labelName, role) 
-                 VALUES (:employeeID, :employeeName, :sin, TO_DATE(:hireDate, 'YYYY-MM-DD'), :labelName, :role)`,
-                {
-                    employeeID: employeeID,
-                    employeeName: employeeName,
-                    sin: sin,
-                    hireDate: hireDate,  
-                    labelName: labelName,
-                    role: role
-                },
-                { autoCommit: true }
-            );
+        const e2InsertResult = await insertWritesContract2(contractID, type, stageName, labelName, startDate, endDate);
+        if (!e2InsertResult) {
+            throw new Error("Failed to insert into EmploysEmployee2.");
+        }
+        return e2InsertResult;
 
-            return insertResult.rowsAffected > 0;
-        });
-
-        return result;
     } catch (error) {
         console.error("Error inserting into the database:", error);
         return false;
     }
 }
 
-
-
-async function insertEmployeeTables(employeeID, employeeName, sin, hireDate, labelName, role, dept, salary) {
+async function insertDemotable(legalName, dateOfBirth, stageName) {
     try {
-        // Ensure data is correctly passed to the tables
-        const e1 = await withOracleDB(async (connection) => {
-            const insertResult = await connection.execute(
-                `INSERT INTO EmploysEmployee1 (role, dept) VALUES (:role, :dept)`,
-                {
-                    role: role,
-                    dept: dept  
-                },
-                { autoCommit: true }
-            );
-            return insertResult.rowsAffected > 0;
-        });
+        console.log('Inserting into tables...');
+    
 
-        const e2 = await withOracleDB(async (connection) => {
-            const insertResult = await connection.execute(
-                `INSERT INTO EmploysEmployee2 (hireDate, salary) VALUES (TO_DATE(:hireDate, 'YYYY-MM-DD'), :salary)`,
-                {
-                    hireDate: hireDate,
-                    salary: salary  // Ensure salary is passed in
-                },
-                { autoCommit: true }
-            );
+        const e1InsertResult = await insertArtist1(legalName, dateOfBirth);
+        if (!e1InsertResult) {
+            throw new Error("Failed to insert into EmploysEmployee1.");
+        }
 
-            return insertResult.rowsAffected > 0;
-        });
+        const e2InsertResult = await insertArtist2(stageName, legalName);
+        if (!e2InsertResult) {
+            throw new Error("Failed to insert into EmploysEmployee2.");
+        }
+        return e2InsertResult;
 
-        return e1 && e2;
     } catch (error) {
         console.error("Error inserting into the database:", error);
         return false;
     }
-      
 }
 
 
 
 
-async function updateNameDemotable(oldName, newName) {
+async function updateWritesContract(key, oldValue, newValue) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `UPDATE EmploysEmployee3 SET role=:newName where role=:oldName`,
-            [newName, oldName],
+            `UPDATE WritesContract2 SET ${key}=:newValue where ${key}=:oldValue`,
+            [newValue, oldValue],
             { autoCommit: true }
         );
 
@@ -276,8 +395,9 @@ module.exports = {
     fetchDemotableFromDb,
     fetchHireDateFromDb,
     initiateDemotable, 
-    initiateEmployee2Table,
     insertDemotable, 
-    updateNameDemotable, 
+    insertWritesContract,
+    insertRecordLabel,
+    updateWritesContract, 
     countDemotable
 };

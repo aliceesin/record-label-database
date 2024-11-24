@@ -26,19 +26,14 @@
 
     <!-- Show 'Demotable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
-    <h2>Show Demotable</h2>
+    <h2>Show Artist1</h2>
     <table id="demotable" border="1">
         <thead>
             <tr>
                 <!--Table head, need to be adjusted accordingly to align with your own.-->
-                <th>ID</th>
-                <th>Name</th>
-                <th>SIN</th>
-                <th>Hiring Date</th>
-                <th>Label Name</th>
-                <th>Role</th>
-                <th>Department</th>
-                <th>Salary</th>
+                <th>Legal Name</th>
+                <th>Date of Birth</th>
+        
             </tr>
         </thead>
         <tbody>
@@ -55,18 +50,38 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> Insert Values into DemoTable </h2>
+    <h2> Insert Values into RecordLabel </h2>
+    <form id="insertRecordLabel">
+        Label Name : <input type="text" id="labelName" placeholder="Enter label name" required maxlength="20" > <br><br>
+        Year Established: <input type="number" id="yearEstablished" placeholder="Enter year" min="1900" max="2100"> <br><br>
+        <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Insert Values into Arist</h2>
     <form id="insertDemotable">
-        ID: <input type="text" id="insertId" placeholder="Enter ID" required> <br><br>
-        Name: <input type="text" id="insertName" placeholder="Enter Name" required maxlength="20"> <br><br>
-        SIN: <input type="number" id="sinValue" placeholder="Enter SIN" required> <br><br>
-        Hiring Date: <input type="date" id="hireDate" placeholder="Enter Hiring Date" required maxlength="20"> <br><br>
-        Label Name: <input type="text" id="labelName" placeholder="Enter LabelName" required maxlength="20"> <br><br>
-        Role: <input type="text" id="roleValue" placeholder="Enter Role" required maxlength="20"> <br><br>
-        Department: <input type="text" id="deptValue" placeholder="Enter Department" required maxlength="20"> <br><br>
-        Salary: <input type="number" id="salaryValue" placeholder="Enter Salary" required maxlength="20"> <br><br>
+        Legal Name: <input type="text" id="legalName" placeholder="Enter name" required maxlength="20"> <br><br>
+        Date of Birth: <input type="date" id="dateOfBirth" placeholder="Enter date of birth" required maxlength="20"> <br><br>
+        Stage Name: <input type="text" id="stageName" placeholder="Enter stage name" required maxlength="20"> <br><br>
+        
+        <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
 
+    <br><hr><br> <!-- ========================================================================= -->
 
+    <h2> Insert Values into WritesContract </h2>
+    <form id="insertWritesContract">
+        Contract Type: <input type="text" id="type" placeholder="Enter contract type" required maxlength="20"> <br><br>
+        Compensation: <input type="number" id="compensation" placeholder="Enter compensation amount" required maxlength="20"> <br><br>
+        ContractID: <input type="text" id="contractID" placeholder="Enter contract ID" required maxlength="20"> <br><br>
+        Stage Name: <input type="text" id="stageName-w" placeholder="Enter stage name" required maxlength="20"> <br><br>
+        Label Name:<input type="text" id="labelName-w" placeholder="Enter label name" required maxlength="20"> <br><br>
+        Start Date: <input type="date" id="startDate" placeholder="Enter start date" required maxlength="20"> <br><br>
+        End Date: <input type="date" id="endDate" placeholder="Enter end date" maxlength="20"> <br><br>
+        
         <button type="submit"> insert </button> <br>
     </form>
     <div id="insertResultMsg"></div>
@@ -75,9 +90,18 @@
 
     <h2>Update Role in DemoTable</h2>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-    <form id="updataNameDemotable">
-        Old Name: <input type="text" id="updateOldName" placeholder="Enter Old Name" required> <br><br>
-        New Name: <input type="text" id="updateNewName" placeholder="Enter New Name" maxlength="20"> <br><br>
+    <form id="updateForm" onsubmit="updateWritesContract(event)">
+        <label for="updateKey">Choose a Key:</label>
+        <select id="updateKey" name="updateKey">
+            <option value="type">contract type</option>
+            <option value="stageName">stage name</option>
+            <option value="startDate">start date</option>
+            <option value="endDate">end date</option>
+        </select>
+        
+    
+        Previous Value: <input type="text" id="oldValue" placeholder="Enter Old Value" required> <br><br>
+        New Value: <input type="text" id="newValue" placeholder="Enter New Value" maxlength="20"> <br><br>
 
         <button type="submit"> update </button> <br>
     </form>

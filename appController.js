@@ -45,10 +45,10 @@ router.post("/initiate-employee2table", async (req, res) => {
 
 router.post("/insert-demotable", async (req, res) => {
     
-    const { id, name, SIN, hireDate, labelName, role, dept, salary} = req.body;
+    const { legalName, dateOfBirth, stageName} = req.body;
     console.log("Request body:", req.body);
 
-    const insertResult = await appService.insertDemotable(id, name, SIN, hireDate, labelName, role, dept, salary);
+    const insertResult = await appService.insertDemotable(legalName, dateOfBirth, stageName);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -56,9 +56,35 @@ router.post("/insert-demotable", async (req, res) => {
     }
 });
 
-router.post("/update-name-demotable", async (req, res) => {
-    const { oldName, newName } = req.body;
-    const updateResult = await appService.updateNameDemotable(oldName, newName);
+router.post("/insert-recordlabel", async (req, res) => {
+    
+    const { labelName, yearEstablished } = req.body;
+    console.log("Request body:", req.body);
+
+    const insertResult = await appService.insertRecordLabel(labelName, yearEstablished);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post("/insert-writescontract", async (req, res) => {
+    
+    const { type, compensation, contractID, stageName, labelName, startDate, endDate } = req.body;
+    console.log("Request body:", req.body);
+
+    const insertResult = await appService.insertWritesContract(type, compensation, contractID, stageName, labelName, startDate, endDate);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post("/update-writescontract", async (req, res) => {
+    const { key, oldValue, newValue } = req.body;
+    const updateResult = await appService.updateWritesContract(key, oldValue, newValue);
     if (updateResult) {
         res.json({ success: true });
     } else {
