@@ -74,7 +74,7 @@ async function resetDemotable() {
         messageElement.textContent = "demotable initiated successfully!";
         fetchTableData();
     } else {
-        alert("Error initiating table!");
+        alert("Error initiating table!" + responseData);
     }
 }
 
@@ -84,7 +84,16 @@ async function insertDemotable(event) {
 
     const idValue = document.getElementById('insertId').value;
     const nameValue = document.getElementById('insertName').value;
+    const sinValue = document.getElementById('sinValue').value;
+    const hireDateValue = document.getElementById('hireDate').value;
+    const labelNameValue = document.getElementById('labelName').value;
+    const roleValue = document.getElementById('roleValue').value;
+    const deptValue = document.getElementById('deptValue').value;
+    const salaryValue = document.getElementById('salaryValue').value;
 
+    console.log("idValue", idValue);
+    console.log("role", roleValue);
+    console.log("salary", salaryValue);
     const response = await fetch('/insert-demotable', {
         method: 'POST',
         headers: {
@@ -92,18 +101,26 @@ async function insertDemotable(event) {
         },
         body: JSON.stringify({
             id: idValue,
-            name: nameValue
+            name: nameValue,
+            SIN: sinValue,
+            hireDate: hireDateValue,
+            labelName: labelNameValue,
+            role: roleValue,
+            dept: deptValue,
+            salary: salaryValue
         })
     });
+    console.log("response", response);
 
     const responseData = await response.json();
+    console.log("responseData", responseData);
     const messageElement = document.getElementById('insertResultMsg');
 
     if (responseData.success) {
         messageElement.textContent = "Data inserted successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error inserting data!";
+        messageElement.textContent = "Error inserting data!" + responseData.messageElement;
     }
 }
 

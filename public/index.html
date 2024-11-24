@@ -33,6 +33,12 @@
                 <!--Table head, need to be adjusted accordingly to align with your own.-->
                 <th>ID</th>
                 <th>Name</th>
+                <th>SIN</th>
+                <th>Hiring Date</th>
+                <th>Label Name</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Salary</th>
             </tr>
         </thead>
         <tbody>
@@ -51,8 +57,15 @@
 
     <h2> Insert Values into DemoTable </h2>
     <form id="insertDemotable">
-        ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
-        Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
+        ID: <input type="text" id="insertId" placeholder="Enter ID" required> <br><br>
+        Name: <input type="text" id="insertName" placeholder="Enter Name" required maxlength="20"> <br><br>
+        SIN: <input type="number" id="sinValue" placeholder="Enter SIN" required> <br><br>
+        Hiring Date: <input type="date" id="hireDate" placeholder="Enter Hiring Date" required maxlength="20"> <br><br>
+        Label Name: <input type="text" id="labelName" placeholder="Enter LabelName" required maxlength="20"> <br><br>
+        Role: <input type="text" id="roleValue" placeholder="Enter Role" required maxlength="20"> <br><br>
+        Department: <input type="text" id="deptValue" placeholder="Enter Department" required maxlength="20"> <br><br>
+        Salary: <input type="number" id="salaryValue" placeholder="Enter Salary" required maxlength="20"> <br><br>
+
 
         <button type="submit"> insert </button> <br>
     </form>
@@ -60,7 +73,7 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2>Update Name in DemoTable</h2>
+    <h2>Update Role in DemoTable</h2>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
     <form id="updataNameDemotable">
         Old Name: <input type="text" id="updateOldName" placeholder="Enter Old Name" required> <br><br>

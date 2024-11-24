@@ -20,6 +20,11 @@ router.get('/demotable', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/hiredate', async (req, res) => {
+    const tableContent = await appService.fetchHireDateFromDb();
+    res.json({data: tableContent});
+});
+
 router.post("/initiate-demotable", async (req, res) => {
     const initiateResult = await appService.initiateDemotable();
     if (initiateResult) {
@@ -29,9 +34,21 @@ router.post("/initiate-demotable", async (req, res) => {
     }
 });
 
+router.post("/initiate-employee2table", async (req, res) => {
+    const initiateResult = await appService.initiateEmployee2Table();
+    if (initiateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
+    
+    const { id, name, SIN, hireDate, labelName, role, dept, salary} = req.body;
+    console.log("Request body:", req.body);
+
+    const insertResult = await appService.insertDemotable(id, name, SIN, hireDate, labelName, role, dept, salary);
     if (insertResult) {
         res.json({ success: true });
     } else {
