@@ -49,7 +49,7 @@ router.get('/having', async (req, res) => {
         const data = await appService.having();
         res.status(200).json({success: true, data});
     } catch (error) {
-        console.error("Error in group-by:", error);
+        console.error("Error in having:", error);
         res.status(500).json({success: false, error: "Failed to fetch group-by data"});
     }
 });
@@ -58,7 +58,7 @@ router.get('/having', async (req, res) => {
 router.get('/group-by', async (req, res) => {
     try {
         const data = await appService.groupBy();
-        res.status(200).json({success: true, data});
+        res.status(200).json({success: true, data: data});
     } catch (error) {
         console.error("Error in group-by:", error);
         res.status(500).json({success: false, error: "Failed to fetch group-by data"});
@@ -70,7 +70,7 @@ router.get('/nested-group-by', async (req, res) => {
         const data = await appService.nestedGroupBy();
         res.status(200).json({success: true, data});
     } catch (error) {
-        console.error("Error in group-by:", error);
+        console.error("Error in nested-group-by:", error);
         res.status(500).json({success: false, error: "Failed to fetch group-by data"});
     }
 });
@@ -81,7 +81,7 @@ router.get('/division', async (req, res) => {
         const data = await appService.division();
         res.status(200).json({success: true, data});
     } catch (error) {
-        console.error("Error in group-by:", error);
+        console.error("Error in division:", error);
         res.status(500).json({success: false, error: "Failed to fetch group-by data"});
     }
 });
