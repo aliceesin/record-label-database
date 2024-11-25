@@ -44,6 +44,49 @@ router.get('/write-table', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/having', async (req, res) => {
+    try {
+        const data = await appService.having();
+        res.status(200).json({success: true, data});
+    } catch (error) {
+        console.error("Error in group-by:", error);
+        res.status(500).json({success: false, error: "Failed to fetch group-by data"});
+    }
+});
+
+
+router.get('/group-by', async (req, res) => {
+    try {
+        const data = await appService.groupBy();
+        res.status(200).json({success: true, data});
+    } catch (error) {
+        console.error("Error in group-by:", error);
+        res.status(500).json({success: false, error: "Failed to fetch group-by data"});
+    }
+});
+
+router.get('/nested-group-by', async (req, res) => {
+    try {
+        const data = await appService.nestedGroupBy();
+        res.status(200).json({success: true, data});
+    } catch (error) {
+        console.error("Error in group-by:", error);
+        res.status(500).json({success: false, error: "Failed to fetch group-by data"});
+    }
+});
+
+
+router.get('/division', async (req, res) => {
+    try {
+        const data = await appService.division();
+        res.status(200).json({success: true, data});
+    } catch (error) {
+        console.error("Error in group-by:", error);
+        res.status(500).json({success: false, error: "Failed to fetch group-by data"});
+    }
+});
+
+
 router.post("/initiate-demotable", async (req, res) => {
     const initiateResult = await appService.initiateDemotable();
     if (initiateResult) {

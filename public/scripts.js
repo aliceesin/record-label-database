@@ -317,6 +317,79 @@ async function countDemotable() {
     }
 }
 
+async function runGroupBy() {
+    const messageElement = document.getElementById('groupByMsg');
+    const response = await fetch("/group-by", {
+        method: 'GET'
+    });
+    console.log("response", response)
+
+    const responseData = await response.json();
+    console.log("responseData", responseData);
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        console.log(responseData);
+        console.log(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runHaving() {
+    const messageElement = document.getElementById('havingMsg');
+    const response = await fetch("/having", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runNestedGroupBy() {
+    const messageElement = document.getElementById('nestedGroupByMsg');
+    const response = await fetch("/nested-group-by", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runDivision() {
+    const messageElement = document.getElementById('divisionMsg');
+    const response = await fetch("/division", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -332,6 +405,10 @@ window.onload = function() {
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
     document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);
     document.getElementById("projectTable").addEventListener("submit", projectTable);
+    document.getElementById("runGroupBy").addEventListener("click", runGroupBy);
+    document.getElementById("runHaving").addEventListener("click", runHaving);
+    document.getElementById("runNestedGroupBy").addEventListener("click", runNestedGroupBy);
+    document.getElementById("runDivision").addEventListener("click", runDivision);
 
 
 };
