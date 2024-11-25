@@ -98,24 +98,35 @@ async function projectFromTable(keys) {
 
 /* 
 ** JOIN QUERY find the stageName and compensation 
-of all artists with the same type of contract 
-SELECT w2.stageName, w1.compensation
-FROM WritesContract1 w1, WritesContract2 w2
-WHERE w1.type = w2.type
+of all artists with the same type of contract type
+It joins WritesContract1 and WritesContract2
 */
-async function joinTable(whereAttribute) {
+async function joinTable(whereValue) {
     return await withOracleDB(async (connection) => {
-        
+        const whereValueInput = whereValue;
         const query = `SELECT w2.stageName, w1.compensation
          FROM WritesContract1 w1, WritesContract2 w2
-         WHERE w1.${whereAttribute} = w2.${whereAttribute}`
-        const result = await connection.execute(query);
+         WHERE w1.type = w2.type
+         AND w1.type = :whereValueInput`
+        const result = await connection.execute(query, {whereValueInput});
         return result.rows;
     }). catch(() => {
         console.error('Joining the two failed:', error);
         throw error;
     })
 }
+
+async function fetchContractTypes() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT DISTINCT w1.type FROM WritesContract1 w1, WritesContract2 w2 WHERE w1.type = w2.type`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+    
+}
+
 
 // select 
 async function selection(whereAttribute) {
@@ -463,5 +474,6 @@ module.exports = {
     updateWritesContract, 
     countDemotable,
     joinTable,
-    projectFromTable
+    projectFromTable,
+    fetchContractTypes
 };

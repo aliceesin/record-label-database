@@ -28,9 +28,14 @@ router.post('/projecttable', async (req, res) => {
     res.json({data: tableContent})
 });
 
-router.get('/jointable', async (req, res) => {
-    const {whereAttribute} = req.body;
-    const tableContent = await appService.joinTable(whereAttribute);
+router.post('/jointable', async (req, res) => {
+    const whereValue = req.body.whereValue;
+    const tableContent = await appService.joinTable(whereValue);
+    res.json({data: tableContent});
+});
+
+router.get('/contractdata', async (req, res) => {
+    const tableContent = await appService.fetchContractTypes();
     res.json({data: tableContent});
 });
 
