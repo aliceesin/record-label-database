@@ -89,7 +89,8 @@ CREATE TABLE WritesContract2(
 	startDate 		DATE		NOT NULL,
 	endDate			DATE,		
 	FOREIGN KEY (labelName) REFERENCES RecordLabel(labelName) ON DELETE CASCADE,
-	FOREIGN KEY (type) REFERENCES WritesContract1 (type) 
+	FOREIGN KEY (stageName) REFERENCES ArtistSigns2(stageName),
+	FOREIGN KEY (type) REFERENCES WritesContract1 (type) ON DELETE CASCADE
 );
 
 CREATE TABLE MusicProfessional(
@@ -260,8 +261,6 @@ INSERT INTO EmploysEmployee1 VALUES ('Marketing Specialist', 'Marketing');
 INSERT INTO EmploysEmployee1 VALUES ('Sales Manager', 'Sales');
 INSERT INTO EmploysEmployee1 VALUES ('Social Media Manager', 'Marketing');
 
-INSERT INTO WritesContract2 VALUES ('2', 'monthly', 'jisoo', 'yg', TO_DATE('2021-06-12', 'YYYY-MM-DD'), TO_DATE('2024-06-12', 'YYYY-MM-DD'));
-
 INSERT INTO EmploysEmployee2 VALUES (TO_DATE('2021-06-12', 'YYYY-MM-DD'), 55000);
 INSERT INTO EmploysEmployee2 VALUES (TO_DATE('2019-05-30', 'YYYY-MM-DD'), 72000);
 INSERT INTO EmploysEmployee2 VALUES (TO_DATE('2020-11-21', 'YYYY-MM-DD'), 60000);
@@ -314,17 +313,9 @@ INSERT INTO WritesContract1 VALUES ('Single-Album Deal', 500000);
 INSERT INTO WritesContract1 VALUES ('Multi-Album Deal', 2000000);
 INSERT INTO WritesContract1 VALUES ('Tour Support', 300000);
 
-INSERT INTO WritesContract2 VALUES ('C101', 'Exclusive', 'Taylor Swift', 'Republic Records', TO_DATE('2018-01-01', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
-INSERT INTO WritesContract2 VALUES ('C102', 'Non-Exclusive', 'Ariana Grande', 'Republic Records', TO_DATE('2017-01-01', 'YYYY-MM-DD'), TO_DATE('2022-12-31', 'YYYY-MM-DD'));
-INSERT INTO WritesContract2 VALUES ('C103', 'Single-Album Deal', 'Bruno Mars', 'Atlantic Records', TO_DATE('2020-01-01', 'YYYY-MM-DD'), NULL);
-INSERT INTO WritesContract2 VALUES ('C104', 'Multi-Album Deal', 'Lady Gaga', 'Interscope Records', TO_DATE('2019-01-01', 'YYYY-MM-DD'), TO_DATE('2025-12-31', 'YYYY-MM-DD'));
-INSERT INTO WritesContract2 VALUES ('C105', 'Tour Support', 'Billie Eilish', 'Interscope Records', TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'));
-INSERT INTO WritesContract2 VALUES ('C106', 'Tour Support', 'Sabrina Carpenter', 'Hollywood Records', TO_DATE('2022-01-02', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
-
-
 INSERT INTO ArtistSigns1 VALUES ('Taylor Swift', TO_DATE('1989-12-13', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Ariana Grande-Butera', TO_DATE('1993-06-26', 'YYYY-MM-DD'));
-INSERT INTO ArtistSigns1 VALUES ('Peters Hernandez', TO_DATE('1985-10-08', 'YYYY-MM-DD'));
+INSERT INTO ArtistSigns1 VALUES ('Peter Hernandez', TO_DATE('1985-10-08', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Stefani Germanotta', TO_DATE('1986-03-28', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Billie OConnell', TO_DATE('2001-12-18', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Sabrina Carpenter', TO_DATE('1999-05-11', 'YYYY-MM-DD'));
@@ -339,6 +330,14 @@ INSERT INTO ArtistSigns2 VALUES ('Bruno Mars', 'Peter Hernandez');
 INSERT INTO ArtistSigns2 VALUES ('Lady Gaga', 'Stefani Germanotta');
 INSERT INTO ArtistSigns2 VALUES ('Billie Eilish', 'Billie OConnell');
 INSERT INTO ArtistSigns2 VALUES ('Sabrina Carpenter', 'Sabrina Carpenter');
+
+INSERT INTO WritesContract2 VALUES ('C101', 'Exclusive', 'Taylor Swift', 'Republic Records', TO_DATE('2018-01-01', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
+INSERT INTO WritesContract2 VALUES ('C102', 'Non-Exclusive', 'Ariana Grande', 'Republic Records', TO_DATE('2017-01-01', 'YYYY-MM-DD'), TO_DATE('2022-12-31', 'YYYY-MM-DD'));
+INSERT INTO WritesContract2 VALUES ('C103', 'Single-Album Deal', 'Bruno Mars', 'Atlantic Records', TO_DATE('2020-01-01', 'YYYY-MM-DD'), NULL);
+INSERT INTO WritesContract2 VALUES ('C104', 'Multi-Album Deal', 'Lady Gaga', 'Interscope Records', TO_DATE('2019-01-01', 'YYYY-MM-DD'), TO_DATE('2025-12-31', 'YYYY-MM-DD'));
+INSERT INTO WritesContract2 VALUES ('C105', 'Tour Support', 'Billie Eilish', 'Interscope Records', TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'));
+INSERT INTO WritesContract2 VALUES ('C106', 'Tour Support', 'Sabrina Carpenter', 'Hollywood Records', TO_DATE('2022-01-02', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
+
 
 INSERT INTO MusicProfessional VALUES ('Max Martin', 25);
 INSERT INTO MusicProfessional VALUES ('Tommy Brown', 10);

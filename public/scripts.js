@@ -44,12 +44,9 @@ async function fetchAndDisplayUsers() {
     const response = await fetch('/demotable', {
         method: 'GET'
     });
-    console.log("response", response);
 
     const responseData = await response.json();
-    console.log("responseData", responseData);
     const demotableContent = responseData.data;
-    console.log("demo content", demotableContent);
 
     // Always clear old, already fetched data before new fetching process.
     if (tableBody) {
@@ -92,6 +89,67 @@ async function fetchAndDisplayContract() {
     });
 }
 
+async function deleteFromTable(event) {
+    event.preventDefault();
+
+    const deleteKeyValue = document.querySelector('select[name="deleteKey"]').value;
+    const valValue = document.getElementById('deleteValue').value;
+
+    const response = await fetch("/deletetable", {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            key: deleteKeyValue,
+            value: valValue
+        })
+    });
+    const responseData = await response.json();
+    const messageElement = document.getElementById('deleteResultMsg');
+
+
+    if (responseData.key !== 0) {
+        messageElement.textContent = "Data deleted successfully!";
+    } else {
+        messageElement.textContent = "Data deleted unsuccessfully!";
+    }
+}
+
+async function projectTable(event) {
+    event.preventDefault();
+
+    const projectKeys = Array.from(
+        document.querySelectorAll('input[name="projectTable"]:checked'))
+        .map(checkbox => checkbox.value);
+
+        console.log("project keys", projectKeys);
+
+    const response = await fetch("/projecttable", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            key: projectKeys,
+            
+        })
+    });
+    const responseData = await response.json();
+    console.log("responseData project", responseData);
+    const messageElement = document.getElementById('projectResultMessage');
+
+
+    if (responseData) {
+        messageElement.textContent = "Choices processed succesfully!";
+        displayProjectTable(projectKeys, responseData.data);
+    } else {
+        messageElement.textContent = "Error in processing choices!";
+    }
+}
+
+
+
 // This function resets or initializes the demotable.
 async function resetDemotable() {
     const response = await fetch("/initiate-demotable", {
@@ -115,7 +173,6 @@ async function insertDemotable(event) {
     const legalNameValue = document.getElementById('legalName').value;
     const dateOfBirthValue = document.getElementById('dateOfBirth').value;
     const stageNameValue = document.getElementById('stageName').value;
-    console.log("dateofb", dateOfBirthValue);
     
     const response = await fetch('/insert-demotable', {
         method: 'POST',
@@ -129,10 +186,8 @@ async function insertDemotable(event) {
             
         })
     });
-    console.log("response", response);
 
     const responseData = await response.json();
-    console.log("responseData", responseData);
     const messageElement = document.getElementById('insertResultMsg');
 
     if (responseData.success) {
@@ -160,10 +215,8 @@ async function insertRecordLabel(event) {
             
         })
     });
-    console.log("response", response);
 
     const responseData = await response.json();
-    console.log("responseData", responseData);
     const messageElement = document.getElementById('insertResultMsg');
 
     if (responseData.success) {
@@ -201,10 +254,8 @@ async function insertWritesContract(event) {
         
         })
     });
-    console.log("response", response);
 
     const responseData = await response.json();
-    console.log("responseData", responseData);
     const messageElement = document.getElementById('insertResultMsg');
 
     if (responseData.success) {
@@ -279,6 +330,8 @@ window.onload = function() {
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRecordLabel").addEventListener("submit", insertRecordLabel);
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
+    document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);
+    document.getElementById("projectTable").addEventListener("submit", projectTable);
 
 
 };

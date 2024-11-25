@@ -15,6 +15,25 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
+router.delete('/deletetable', async (req, res) => {
+    const {key, value} = req.body;
+    const tableContent = await appService.deleteFromTable(key, value);
+    res.json({data: tableContent});
+});
+
+router.post('/projecttable', async (req, res) => {
+    const keys = req.body;
+    console.log("keys in controller", keys.key);
+    const tableContent = await appService.projectFromTable(keys.key);
+    res.json({data: tableContent})
+});
+
+router.get('/jointable', async (req, res) => {
+    const {whereAttribute} = req.body;
+    const tableContent = await appService.joinTable(whereAttribute);
+    res.json({data: tableContent});
+});
+
 router.get('/demotable', async (req, res) => {
     const tableContent = await appService.fetchDemotableFromDb();
     res.json({data: tableContent});
@@ -25,22 +44,8 @@ router.get('/write-table', async (req, res) => {
     res.json({data: tableContent});
 });
 
-router.get('/hiredate', async (req, res) => {
-    const tableContent = await appService.fetchHireDateFromDb();
-    res.json({data: tableContent});
-});
-
 router.post("/initiate-demotable", async (req, res) => {
     const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/initiate-employee2table", async (req, res) => {
-    const initiateResult = await appService.initiateEmployee2Table();
     if (initiateResult) {
         res.json({ success: true });
     } else {

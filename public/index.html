@@ -124,7 +124,6 @@
 
     <script>
         function updateDropdownId() {
-            console.log("hh");
             const dropdown = document.getElementById('updateKey');
             const selectedValue = dropdown.value;
     
@@ -135,6 +134,112 @@
 
     <!-- A placeholder to display messages related to the update operation. -->
     <div id="updateNameResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Delete values from Record Label</h2>
+    <form id="deleteFromTable" >
+        <label for="deleteKeys">Choose a Key:</label>
+        <select id="deleteKeys" name="deleteKey" onchange="updateDropdownId()">
+            <option value="labelName">Label Name</option>
+            <option value="yearEstablished">Year Established</option>
+        </select>
+        Value to delete: <input type="text" id="deleteValue" placeholder="Enter value to delete" required> <br><br>
+
+        <button type="click"> delete </button> <br>
+    </form>
+
+    <script>
+        function updateDropdownId() {
+            
+            const dropdown = document.getElementById('deleteKeys');
+            const selectedValue = dropdown.value;
+
+            dropdown.id = selectedValue;
+        }
+    </script>
+    
+    <div id="deleteResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Choose the columns to view in contracts</h2>
+    <form id="projectTable" >
+        <div>
+            <input type="checkbox" id="contractID" name="projectTable" value="contractID" />
+            <label for="contractID">Contract ID</label>
+          </div>
+          <div>
+            <input type="checkbox" id="type" name="projectTable" value="type" />
+            <label for="type">Contract Type</label>
+          </div>
+          <div>
+            <input type="checkbox" id="stageName" name="projectTable" value="stageName" />
+            <label for="stageName">Stage Name</label>
+          </div>
+          <div>
+            <input type="checkbox" id="labelName" name="projectTable" value="labelName" />
+            <label for="labelName">Label Name</label>
+          </div>
+          <div>
+            <input type="checkbox" id="startDate" name="projectTable" value="startDate" />
+            <label for="startDate">Start Date</label>
+          </div>
+          <div>
+            <input type="checkbox" id="endDate" name="projectTable" value="endDate" />
+            <label for="endDate">End Date</label>
+          </div>
+
+          <div>
+            <button type="submit">Submit choices</button>
+          </div>
+        </form>
+
+    <div id="projectResultMessage"></div>
+
+    <h2>Show Projected Table</h2>
+    <table id="showProjectTable" border="1">
+        <thead>
+            <tr id="tableHeaderRow">
+                <script>
+                    function displayProjectTable(columns, data) {
+                    const tableElement = document.getElementById('showProjectTable');
+                    const tableHeader = tableElement.querySelector('thead tr');
+                    const tableBody = tableElement.querySelector('tbody');
+
+                    const contractContent = data;
+
+                    // Always clear old, already fetched data before new fetching process.
+                    if (tableBody) {
+                        tableBody.innerHTML = '';
+                    }
+
+                    if (tableHeader) {
+                        tableHeader.innerHTML = '';
+                    }
+
+                    columns.forEach(column => {
+                        const th = document.createElement('th');
+                        th.textContent = column;
+                        tableHeader.appendChild(th);
+                    });
+
+                    contractContent.forEach(user => {
+                        const row = tableBody.insertRow();
+                        user.forEach((field, index) => {
+                            const cell = row.insertCell(index);
+                            cell.textContent = field;
+                        });
+                    });
+                }
+                </script>
+        
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
 
     <br><hr><br> <!-- ========================================================================= -->
 

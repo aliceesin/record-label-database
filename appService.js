@@ -76,6 +76,76 @@ async function testOracleConnection() {
     });
 }
 
+async function projectFromTable(keys) {
+    return await withOracleDB(async (connection) => {
+        let columns;
+        console.log("keys", keys);
+        if (Array.isArray(keys)) {
+            columns = keys.join(',');
+        } else {
+            columns = keys;
+        }
+        console.log("columns", columns);
+        const query = `SELECT ${columns} FROM WritesContract2`;
+        const result = await connection.execute(query);
+        return result.rows;
+    }). catch(() => {
+        console.error('Project from table failed:', error);
+        throw error;
+    })
+}
+
+
+/* 
+** JOIN QUERY find the stageName and compensation 
+of all artists with the same type of contract 
+SELECT w2.stageName, w1.compensation
+FROM WritesContract1 w1, WritesContract2 w2
+WHERE w1.type = w2.type
+*/
+async function joinTable(whereAttribute) {
+    return await withOracleDB(async (connection) => {
+        
+        const query = `SELECT w2.stageName, w1.compensation
+         FROM WritesContract1 w1, WritesContract2 w2
+         WHERE w1.${whereAttribute} = w2.${whereAttribute}`
+        const result = await connection.execute(query);
+        return result.rows;
+    }). catch(() => {
+        console.error('Joining the two failed:', error);
+        throw error;
+    })
+}
+
+// select 
+async function selection(whereAttribute) {
+    return await withOracleDB(async (connection) => {
+        
+        const query = `SELECT w2.stageName, w1.compensation
+         FROM WritesContract1 w1, WritesContract2 w2
+         WHERE w1.${whereAttribute} = w2.${whereAttribute}`
+        const result = await connection.execute(query);
+        return result.rows;
+    }). catch(() => {
+        console.error('Joining the two failed:', error);
+        throw error;
+    })
+}
+
+
+
+async function deleteFromTable(key, value) {
+    return await withOracleDB(async (connection) => {
+        const query = `DELETE FROM RecordLabel WHERE ${key} = :value`;
+        const result = await connection.execute(query, { value }, 
+            { autoCommit: true });
+        return result.rowsAffected;
+    }). catch(() => {
+        console.error('Delete from table failed:', error);
+        throw error;
+    })
+}
+
 async function fetchDemotableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM ArtistSigns1');
@@ -234,8 +304,6 @@ async function insertArtist2(stageName, legalName) {
 }
 
 async function insertRecordLabel(labelName, yearEstablished) {
-    return await withOracleDB(async (connection) => {
-        try {
             return await withOracleDB(async (connection) => {
                 try {
                     const checkResult = await connection.execute(
@@ -262,13 +330,6 @@ async function insertRecordLabel(labelName, yearEstablished) {
                     throw error;
                 }
             });
-            
-
-        } catch (error) {
-            console.error('Error in RecordLabel:', error);
-            throw error;
-        }
-    });
 }
 
 async function insertWritesContract1 (type, compensation) {
@@ -392,6 +453,7 @@ async function countDemotable() {
 
 module.exports = {
     testOracleConnection,
+    deleteFromTable,
     fetchDemotableFromDb,
     fetchWritesContractTable,
     initiateDemotable, 
@@ -399,5 +461,7 @@ module.exports = {
     insertWritesContract,
     insertRecordLabel,
     updateWritesContract, 
-    countDemotable
+    countDemotable,
+    joinTable,
+    projectFromTable
 };
