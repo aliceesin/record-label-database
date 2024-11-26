@@ -129,19 +129,38 @@ async function fetchContractTypes() {
 
 
 // select 
-async function selection(whereAttribute) {
-    return await withOracleDB(async (connection) => {
-        
-        const query = `SELECT w2.stageName, w1.compensation
-         FROM WritesContract1 w1, WritesContract2 w2
-         WHERE w1.${whereAttribute} = w2.${whereAttribute}`
-        const result = await connection.execute(query);
-        return result.rows;
-    }). catch(() => {
-        console.error('Joining the two failed:', error);
+async function selection(attributes) {
+    try {
+        return await withOracleDB(async (connection) => {
+            const conditions = [];
+            const params = {};
+
+            attributes.forEach((condition, index) => {
+                const { column, operator, value, logicalOperator } = condition;
+                const paramName = `param${index}`;
+                conditions.push(`${column} ${operator} :${paramName}`);
+                params[paramName] = value;
+
+                if (logicalOperator) {
+                    conditions.push(logicalOperator);
+                }
+            });
+
+            const newAttributes = conditions.join(" ");
+
+            const query = `SELECT *
+                FROM Song
+                WHERE ${newAttributes}`;
+
+            const result = await connection.execute(query, params);
+            return result.rows;
+        });
+    } catch (error) {
+        console.error('Select failed:', error);
         throw error;
-    })
+    }
 }
+
 
 
 
@@ -462,6 +481,84 @@ async function countDemotable() {
     });
 }
 
+async function groupBy() {
+    return await withOracleDB(async (connection) => {
+        try {
+            const result = await connection.execute(
+                `SELECT stageName, MIN(numTracks)
+                 FROM Album 
+                 WHERE professionalName = 'Jack Antonoff'
+                 GROUP BY stageName`
+            );
+            console.log(result.rows);
+            return result.rows;
+        } catch (error) {
+            console.error("Error in GROUP BY", error);
+            return false;
+        }
+    })
+}
+
+async function having() {
+    return await withOracleDB(async (connection) => {
+        try {
+            const result = await connection.execute(
+                `SELECT stageName, COUNT(*) 
+                 FROM Album 
+                 WHERE numTracks > 9 
+                 GROUP BY stageName 
+                 HAVING COUNT(*) > 1`
+            );
+            return result.rows;
+        } catch (error) {
+            console.error("Error in HAVING", error);
+            return false;
+        }
+    })
+}
+
+async function nestedGroupBy() {
+    return await withOracleDB(async (connection) => {
+        try {
+            const result = await connection.execute(
+                `SELECT professionalName, AVG(numTracks) 
+                 FROM Album
+                 GROUP BY professionalName
+                 HAVING AVG(numTracks) >= (
+                     SELECT AVG(numTracks)
+                     FROM Album)`
+            );
+            return result.rows;
+        } catch (error) {
+            console.error("Error in nested GROUP BY", error);
+            return false;
+        }
+    })
+}
+
+async function division() {
+    return await withOracleDB(async (connection) => {
+        try {
+            const result = await connection.execute(
+                `SELECT DISTINCT A.stageName
+                 FROM Album A
+                 WHERE NOT EXISTS (
+                     SELECT S.genre
+                     FROM Song S
+                     WHERE NOT EXISTS (
+                         SELECT *
+                         FROM Album A2, Song S2
+                         WHERE A2.stageName = A.stageName AND S2.genre = S.genre AND A2.UPC = S2.UPC))`
+            );
+            return result.rows;
+        } catch (error) {
+            console.error("Error in division", error);
+            return false;
+        }
+    })
+}
+
+
 module.exports = {
     testOracleConnection,
     deleteFromTable,
@@ -475,5 +572,10 @@ module.exports = {
     countDemotable,
     joinTable,
     projectFromTable,
+    groupBy,
+    having,
+    nestedGroupBy,
+    division,
+    selection,
     fetchContractTypes
 };

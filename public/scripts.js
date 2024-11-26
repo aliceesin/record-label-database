@@ -389,6 +389,159 @@ async function countDemotable() {
     }
 }
 
+async function runGroupBy() {
+    const messageElement = document.getElementById('groupByMsg');
+    const response = await fetch("/group-by", {
+        method: 'GET'
+    });
+    console.log("response", response)
+
+    const responseData = await response.json();
+    console.log("responseData", responseData);
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        console.log(responseData);
+        console.log(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runHaving() {
+    const messageElement = document.getElementById('havingMsg');
+    const response = await fetch("/having", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runNestedGroupBy() {
+    const messageElement = document.getElementById('nestedGroupByMsg');
+    const response = await fetch("/nested-group-by", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runDivision() {
+    const messageElement = document.getElementById('divisionMsg');
+    const response = await fetch("/division", {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        const result = JSON.stringify(responseData.data);
+        messageElement.textContent = `Query Results: \n${result}`;
+    } else {
+        alert("Error!");
+    }
+
+}
+
+async function runSelection(event) {
+    event.preventDefault();
+    const conditionBlocks = document.querySelectorAll(".condition");
+    const conditions = [];
+
+    conditionBlocks.forEach((block, index) => {
+        const column = block.querySelector(".attribute").value;
+        const operator = block.querySelector(".operator").value;
+        const value = block.querySelector(".value").value.trim();
+        const logicalOperator = index < conditionBlocks.length - 1 ? block.querySelector(".logicalOperator").value : null;
+
+        if (column && operator && value) {
+            conditions.push({column, operator, value, logicalOperator});
+        } else {
+            console.error("Please fill out all fields!");
+        }
+    })
+
+    try {
+        const response = await fetch("/selection", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({attributes: conditions}),
+        });
+
+        const responseData = await response.json();
+        const messageElement = document.getElementById("selectionResultMsg");
+
+        if (responseData) {
+            messageElement.textContext = "Success!";
+            const tableElement = document.getElementById("selectionTable");
+            const tableBody = tableElement.querySelector("tbody");
+
+            const resultData = responseData.data;
+
+            if (tableBody) {
+                tableBody.innerHTML = "";
+            }
+
+            resultData.forEach(row => {
+                const tableRow = tableBody.insertRow();
+                row.forEach((field, index) => {
+                    const cell = tableRow.insertCell(index);
+                    cell.textContent = field;
+                })
+            })
+        } else {
+            messageElement.textContext = "error: query failed!";
+        }
+    } catch (err) {
+        console.error("Error occurred:", err);
+        const messageElement = document.getElementById("selectionResultMsg");
+        messageElement.textContent = `Error: ${err.message}`;
+    }
+
+
+
+
+}
+
+function addCondition() {
+    const form = document.getElementById("selectionForm");
+    const firstCondition = form.querySelector(".condition");
+    const newCondition = firstCondition.cloneNode(true);
+    const inputs = newCondition.querySelectorAll("input, select");
+    inputs.forEach(input => {
+        if (input.type === "text" || input.type === "number" || input.type === "date") {
+            input.value = "";
+        } else if (input.tagName === "SELECT") {
+            input.selectedIndex = 0;
+        }
+    })
+
+    form.insertBefore(newCondition, document.getElementById("addCondition"));
+}
+
+
+
+
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -404,7 +557,16 @@ window.onload = function() {
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
     document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);
     document.getElementById("projectTable").addEventListener("submit", projectTable);
+
+    document.getElementById("runGroupBy").addEventListener("click", runGroupBy);
+    document.getElementById("runHaving").addEventListener("click", runHaving);
+    document.getElementById("runNestedGroupBy").addEventListener("click", runNestedGroupBy);
+    document.getElementById("runDivision").addEventListener("click", runDivision);
+    document.getElementById("submitQuery").addEventListener("click", runSelection);
+    document.getElementById("addCondition").addEventListener("click", addCondition);
+
     document.getElementById("joinTable").addEventListener("submit", joinTable);
+
 
 
 };

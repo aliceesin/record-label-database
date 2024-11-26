@@ -160,7 +160,7 @@ CREATE TABLE Song(
 	title			VARCHAR2(50) 	NOT NULL,
 	releaseDate		DATE		NOT NULL,
 	genre			VARCHAR2(50) 	NOT NULL,
-	duration		VARCHAR2(50) 	NOT NULL,
+	duration		INT	 	NOT NULL,
 	stageName		VARCHAR2(50) 	NOT NULL,
 	recordingDate		DATE		NOT NULL,
 	studioName		VARCHAR2(50)  	NOT NULL,	
@@ -321,8 +321,6 @@ INSERT INTO ArtistSigns1 VALUES ('Billie OConnell', TO_DATE('2001-12-18', 'YYYY-
 INSERT INTO ArtistSigns1 VALUES ('Sabrina Carpenter', TO_DATE('1999-05-11', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Chappell Roan', TO_DATE('1998-02-19', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Kendrick Lamar', TO_DATE('1987-06-17', 'YYYY-MM-DD'));
-INSERT INTO ArtistSigns1 VALUES ('Drake', TO_DATE('1986-10-24', 'YYYY-MM-DD'));
-INSERT INTO ArtistSigns1 VALUES ('Linkin Park', TO_DATE('1996-03-01', 'YYYY-MM-DD'));
 
 INSERT INTO ArtistSigns2 VALUES ('Taylor Swift', 'Taylor Swift');
 INSERT INTO ArtistSigns2 VALUES ('Ariana Grande', 'Ariana Grande-Butera');
@@ -390,6 +388,7 @@ INSERT INTO Producer VALUES ('Finneas', 'Alternative');
 INSERT INTO Producer VALUES ('Greg Kurstin', 'Pop');
 INSERT INTO Producer VALUES ('Rik Simpson', 'Rock');
 INSERT INTO Producer VALUES ('Julian Bunetta', 'Pop');
+INSERT INTO Producer VALUES ('Jack Antonoff', 'Pop');
 
 
 INSERT INTO Studio VALUES ('Capital Records Recording Studios', 'NY', '1200');
@@ -401,22 +400,32 @@ INSERT INTO Studio VALUES ('Studio6', 'Hensen Recording Studios', 650);
 INSERT INTO Studio VALUES ('Studio7', 'Miami Recording Studios', 823);
 
 INSERT INTO Album VALUES (602435648583, 'Max Martin', 'Taylor Swift', 'Evermore', 15, '01:01:00', TO_DATE('2020-12-11', 'YYYY-MM-DD'), 2000000);
-INSERT INTO Album VALUES (602435864563, 'Tommy Brown', 'Ariana Grande', 'Positions', 14, '00:41:00', TO_DATE('2020-10-30', 'YYYY-MM-DD'), 1200000);
-INSERT INTO Album VALUES (075678662737, 'Mark Ronson', 'Bruno Mars', '24K Magic', 9, '00:33:00', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 1500000);
+INSERT INTO Album VALUES (602435034881, 'Jack Antonoff', 'Taylor Swift', 'Folklore', 15, '01:03:29', TO_DATE('2020-07-24', 'YYYY-MM-DD'), 2300000);
+INSERT INTO Album VALUES (606535034881, 'Jack Antonoff', 'Taylor Swift', 'Midnights', 13, '00:44:02', TO_DATE('2022-10-21', 'YYYY-MM-DD'), 1800000);
+INSERT INTO Album VALUES (602437654881, 'Max Martin', 'Taylor Swift', '1989', 13, '00:48:41', TO_DATE('2014-10-27', 'YYYY-MM-DD'), 2100000);
+INSERT INTO Album VALUES (602437641881, 'Jack Antonoff', 'Taylor Swift', 'Lover', 18, '01:01:48', TO_DATE('2019-08-19', 'YYYY-MM-DD'), 1500000);
+INSERT INTO Album VALUES (602435864563, 'Tommy Brown', 'Ariana Grande', 'Positions', 14, '00:35:26', TO_DATE('2020-10-30', 'YYYY-MM-DD'), 1200000);
+INSERT INTO Album VALUES (602435123563, 'Max Martin', 'Ariana Grande', 'Eternal Sunshine', 13, '00:41:00', TO_DATE('2024-03-08', 'YYYY-MM-DD'), 1400000);
+INSERT INTO Album VALUES (602435098563, 'Max Martin', 'Ariana Grande', 'Thank U, Next', 12, '00:41:11', TO_DATE('2019-02-08', 'YYYY-MM-DD'), 1800000);
+INSERT INTO Album VALUES (075678662737, 'Jack Antonoff', 'Bruno Mars', '24K Magic', 9, '00:33:00', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 1500000);
+INSERT INTO Album VALUES (075678669037, 'Jack Antonoff', 'Bruno Mars', 'Unorthodox Jukebox', 10, '00:34:51', TO_DATE('2012-12-07', 'YYYY-MM-DD'), 2400000);
 INSERT INTO Album VALUES (00602508854064, 'RedOne', 'Lady Gaga', 'Chromatica', 16, '00:43:00', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 1300000);
 INSERT INTO Album VALUES (602438241644, 'Finneas', 'Billie Eilish', 'Happier Than Ever', 16, '00:56:00', TO_DATE('2021-07-30', 'YYYY-MM-DD'), 1800000);
+INSERT INTO Album VALUES (602431231644, 'Finneas', 'Billie Eilish', 'Hit Me Hard and Soft', 10, '00:43:45', TO_DATE('2024-05-17', 'YYYY-MM-DD'), 400000);
 INSERT INTO Album VALUES (093624839842, 'Julian Bunetta', 'Sabrina Carpenter', 'Emails I Cant Send', 17, '00:50:56', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 850000);
+INSERT INTO Album VALUES (093621239842, 'Jack Antonoff', 'Sabrina Carpenter', 'Evolution', 10, '00:33:21', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 30000);
+INSERT INTO Album VALUES (093654239842, 'Jack Antonoff', 'Sabrina Carpenter', 'Short n Sweet', 12, '00:36:15', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 1230000);
 
-INSERT INTO Song VALUES ('USUG12004699', 'Willow', TO_DATE('2020-12-11', 'YYYY-MM-DD'), 'Pop', '00:03:35', 'Taylor Swift', TO_DATE('2020-11-25', 'YYYY-MM-DD'), 'Capital Records Recording Studios', 'NY', 602435648583);
-INSERT INTO Song VALUES ('USUM72019412', 'Positions', TO_DATE('2020-10-30', 'YYYY-MM-DD'), 'Pop', '00:02:52', 'Ariana Grande', TO_DATE('2020-09-15', 'YYYY-MM-DD'), 'Clear Lake Recording Studios', 'LA', 602435864563);
-INSERT INTO Song VALUES ('USAT21602944', '24K Magic', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Funk', '00:03:45', 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
-INSERT INTO Song VALUES ('USUM72004304', 'Rain on Me', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', '00:03:02', 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
-INSERT INTO Song VALUES ('USUM72105934', 'Your Power', TO_DATE('2021-07-30', 'YYYY-MM-DD'), 'Alternative', '00:04:05', 'Billie Eilish', TO_DATE('2021-05-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 602438241644);
-INSERT INTO Song VALUES ('USUM72210694', 'Read Your Mind', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', '00:03:27', 'Sabrina Carpenter', TO_DATE('2021-06-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
-INSERT INTO Song VALUES ('USUM72200377', 'Fast Times', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', '00:02:54', 'Sabrina Carpenter', TO_DATE('2021-07-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
-INSERT INTO Song VALUES ('USUM72114679', 'Skinny Dipping', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', '00:02:57', 'Sabrina Carpenter', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
-INSERT INTO Song VALUES ('USUM72301876', 'Feather', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', '00:03:05', 'Sabrina Carpenter', TO_DATE('2021-09-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
-INSERT INTO Song VALUES ('USUM72210708', 'Nonsense', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', '00:02:43', 'Sabrina Carpenter', TO_DATE('2021-10-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUG12004699', 'Willow', TO_DATE('2020-12-11', 'YYYY-MM-DD'), 'Pop', 215, 'Taylor Swift', TO_DATE('2020-11-25', 'YYYY-MM-DD'), 'Capital Records Recording Studios', 'NY', 602435648583);
+INSERT INTO Song VALUES ('USUM72019412', 'Positions', TO_DATE('2020-10-30', 'YYYY-MM-DD'), 'Pop', 172, 'Ariana Grande', TO_DATE('2020-09-15', 'YYYY-MM-DD'), 'Clear Lake Recording Studios', 'LA', 602435864563);
+INSERT INTO Song VALUES ('USAT21602944', '24K Magic', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Funk', 225, 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
+INSERT INTO Song VALUES ('USUM72004304', 'Rain on Me', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 182, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
+INSERT INTO Song VALUES ('USUM72105934', 'Your Power', TO_DATE('2021-07-30', 'YYYY-MM-DD'), 'Alternative', 245, 'Billie Eilish', TO_DATE('2021-05-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 602438241644);
+INSERT INTO Song VALUES ('USUM72210694', 'Read Your Mind', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 207, 'Sabrina Carpenter', TO_DATE('2021-06-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUM72200377', 'Fast Times', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 174, 'Sabrina Carpenter', TO_DATE('2021-07-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUM72114679', 'Skinny Dipping', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 177, 'Sabrina Carpenter', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUM72301876', 'Feather', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Funk', 185, 'Sabrina Carpenter', TO_DATE('2021-09-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUM72210708', 'Nonsense', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Alternative', 163, 'Sabrina Carpenter', TO_DATE('2021-10-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 
 INSERT INTO Single VALUES ('USUG12004699', 500000);
 INSERT INTO Single VALUES ('USUM72019412', 1200000);

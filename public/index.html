@@ -239,6 +239,77 @@
         <tbody>
         </tbody>
     </table>
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <button id="runHaving">Run HAVING Query</button>
+    <div id="havingMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <button id="runGroupBy">Run GROUP BY Query</button>
+    <div id="groupByMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <button id="runNestedGroupBy">Run Nested GROUP BY Query</button>
+    <div id="nestedGroupByMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <button id="runDivision">Run Division Query</button>
+    <div id="divisionMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <div id="selectionForm">
+        <div class="condition">
+            <select name="attribute" class="attribute">
+                <option value="releaseDate">Release Date (YYYY-MM-DD)</option>
+                <option value="duration">Length (seconds)</option>
+                <option value="genre">Genre</option>
+                <option value="stageName">Artist</option>
+            </select>
+            <select name="operator" class="operator">
+                <option value="=">=</option>
+                <option value="<"><</option>
+                <option value=">">></option>
+            </select>
+            <input type="text" name="value" class="value" placeholder="Enter value">
+            <select name="logicalOperator" class="logicalOperator">
+                <option value=""></option>
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+            </select>
+        </div>
+        <button id="addCondition">Add Condition</button>
+        <button id="submitQuery">Run Query</button>
+    </div>
+    <div id="queryResults"></div>
+
+    <div>
+        <table id="selectionTable" border="1">
+            <thead>
+            <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+                <th>Column 4</th>
+                <th>Column 5</th>
+                <th>Column 6</th>
+                <th>Column 7</th>
+                <th>Column 8</th>
+                <th>Column 9</th>
+                <th>Column 10</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="selectionResultMsg"></p>
+    </div>
+
+
     
     <br><hr><br> <!-- ========================================================================= -->
 
@@ -305,6 +376,7 @@
         </tbody>
     </table>
 
+
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2>Count the Tuples in DemoTable</h2>
@@ -315,5 +387,8 @@
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>
+
+
+
 </body>
 </html>
