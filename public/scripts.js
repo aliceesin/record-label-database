@@ -48,6 +48,15 @@ function transformDate(input) {
     }
 }
 
+function mapDataToTable(demotableContent, tableBody) {
+    demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = transformDate(field);
+        });
+    });
+}
 
 // Fetches data from the demotable and displays it.
 async function fetchAndDisplayUsers() {
@@ -66,13 +75,7 @@ async function fetchAndDisplayUsers() {
         tableBody.innerHTML = '';
     }
 
-    demotableContent.forEach(user => {
-        const row = tableBody.insertRow();
-        user.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = transformDate(field);
-        });
-    });
+    mapDataToTable(demotableContent, tableBody);
     
 }
 
@@ -94,14 +97,15 @@ async function fetchAndDisplayContract() {
         tableBody.innerHTML = '';
     }
 
-    contractContent.forEach(user => {
-        const row = tableBody.insertRow();
-        user.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = transformDate(field);
+    mapDataToTable(contractContent, tableBody);
+    // contractContent.forEach(user => {
+    //     const row = tableBody.insertRow();
+    //     user.forEach((field, index) => {
+    //         const cell = row.insertCell(index);
+    //         cell.textContent = transformDate(field);
             
-        });
-    });
+    //     });
+    // });
 }
 
 async function deleteFromTable(event) {
@@ -215,13 +219,14 @@ async function joinTable(event) {
                 tableBody.innerHTML = '';
             }
         
-            demotableContent.forEach(user => {
-                const row = tableBody.insertRow();
-                user.forEach((field, index) => {
-                    const cell = row.insertCell(index);
-                    cell.textContent = field;
-                });
-            });
+            mapDataToTable(demotableContent, tableBody);
+            // demotableContent.forEach(user => {
+            //     const row = tableBody.insertRow();
+            //     user.forEach((field, index) => {
+            //         const cell = row.insertCell(index);
+            //         cell.textContent = field;
+            //     });
+            // });
             
         } else {
             messageElement.textContent = "Error processing data!";
@@ -517,13 +522,7 @@ async function runSelection(event) {
                 tableBody.innerHTML = "";
             }
 
-            resultData.forEach(row => {
-                const tableRow = tableBody.insertRow();
-                row.forEach((field, index) => {
-                    const cell = tableRow.insertCell(index);
-                    cell.textContent = field;
-                })
-            })
+            mapDataToTable(resultData, tableBody);
         } else {
             messageElement.textContext = "error: query failed!";
         }
