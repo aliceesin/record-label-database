@@ -130,6 +130,8 @@ async function fetchContractTypes() {
 
 // select 
 async function selection(attributes) {
+    console.log("testing");
+
     try {
         return await withOracleDB(async (connection) => {
             const conditions = [];
@@ -138,7 +140,12 @@ async function selection(attributes) {
             attributes.forEach((condition, index) => {
                 const { column, operator, value, logicalOperator } = condition;
                 const paramName = `param${index}`;
-                conditions.push(`${column} ${operator} :${paramName}`);
+
+                if (column === "releaseDate") {
+                    conditions.push(`${column} ${operator} TO_DATE(:${paramName}, 'YYYY-MM-DD')`);
+                } else {
+                    conditions.push(`${column} ${operator} :${paramName}`);
+                }
                 params[paramName] = value;
 
                 if (logicalOperator) {
@@ -152,6 +159,7 @@ async function selection(attributes) {
                 FROM Song
                 WHERE ${newAttributes}`;
 
+            console.log(query);
             const result = await connection.execute(query, params);
             return result.rows;
         });

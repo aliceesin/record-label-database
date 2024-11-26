@@ -166,6 +166,7 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+
 router.post('/selection', async (req, res) => {
     const {attributes} = req.body;
     const result = await appService.selection(attributes);
