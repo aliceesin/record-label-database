@@ -12,7 +12,6 @@
  * 
  */
 
-
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
     const statusElem = document.getElementById('dbStatus');
@@ -36,6 +35,20 @@ async function checkDbConnection() {
     });
 }
 
+// Transforms date to YYYY-MM-DD format 
+function transformDate(input) {
+    if (typeof input === "string" && Date.parse(input)) {
+        const date = new Date(input)
+        const formatDate = 
+        `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDay()+1).padStart(2, "0")}`;
+
+        return formatDate;
+    } else {
+        return input;
+    }
+}
+
+
 // Fetches data from the demotable and displays it.
 async function fetchAndDisplayUsers() {
     const tableElement = document.getElementById('demotable');
@@ -57,11 +70,12 @@ async function fetchAndDisplayUsers() {
         const row = tableBody.insertRow();
         user.forEach((field, index) => {
             const cell = row.insertCell(index);
-            cell.textContent = field;
+            cell.textContent = transformDate(field);
         });
     });
     
 }
+
 
 // fetch writescontract table
 async function fetchAndDisplayContract() {
@@ -84,7 +98,8 @@ async function fetchAndDisplayContract() {
         const row = tableBody.insertRow();
         user.forEach((field, index) => {
             const cell = row.insertCell(index);
-            cell.textContent = field;
+            cell.textContent = transformDate(field);
+            
         });
     });
 }

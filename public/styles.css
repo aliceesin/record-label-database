@@ -79,8 +79,91 @@ input::placeholder, textarea::placeholder {
     color: #aaa;
 }
 
+label {
+    font-size: 16px;
+    font-weight: normal;
+    margin: 2px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+option {
+    color: #B4886B;
+    font-weight: bold;
+    display: block;
+    size: 16px;
+    margin-bottom: 6px;
+}
+
+#updateWritesContract br {
+    margin: 5px 0;
+}
+input:focus,
+select:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 /* OTHER STYLES */
 .loading-gif {
     height: 1em;
     vertical-align: middle;
 }
+
+/* PROJECTION PORTION */
+
+#projectTable div {
+    display: flex;
+    align-items: left;
+    margin-bottom: 15px;
+    width: 50px;
+}
+
+#projectTable input[type="checkbox"] {
+    margin: 0; 
+    
+    outline: none;
+    appearance: none; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    width: 2%;
+    height: 2px;
+    margin-right: 5px;
+    cursor: pointer; 
+}
+
+#projectTable input[type="checkbox"]:checked {
+    background-color: #007BFF;
+    border-color: #007BFF; 
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+#projectTable input {
+    outline: none;
+}
+
+#projectTable label {
+    font-size: 16px;
+    color: #333;
+    white-space: nowrap;
+}
+
+
+
+
+
+
+
+
+
+
