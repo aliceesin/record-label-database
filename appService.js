@@ -179,8 +179,7 @@ async function deleteFromTable(key, value) {
             { autoCommit: true });
         return result.rowsAffected;
     }). catch(() => {
-        console.error('Delete from table failed:', error);
-        throw error;
+        return 0;
     })
 }
 
@@ -349,9 +348,9 @@ async function insertRecordLabel(labelName, yearEstablished) {
                         { labelName: labelName }
                     );
                     const row = checkResult.rows[0];
-                    console.log("row", row);
                     if (row[0] > 0) {
-                        console.log(`RecordLabel with labelName ${labelName} already exists.`);
+                        return false;
+                        // throw new Error(`RecordLabel with labelName ${labelName} already exists.`);
                     } else {
                         const insertResult = await connection.execute(
                             `INSERT INTO RecordLabel (labelName, yearEstablished) VALUES (:labelName, :yearEstablished)`,
@@ -362,7 +361,6 @@ async function insertRecordLabel(labelName, yearEstablished) {
                         console.log(`Successfully inserted into RecordLabel`);
                         return insertResult.rowsAffected > 0;
                     }
-                    return true; 
                 } catch (error) {
                     console.error('Error in RecordLabel:', error);
                     throw error;
@@ -480,15 +478,6 @@ async function updateWritesContract(key, oldValue, newValue) {
     });
 }
 
-async function countDemotable() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT Count(*) FROM EmploysEmployee3');
-        return result.rows[0][0];
-    }).catch(() => {
-        return -1;
-    });
-}
-
 async function groupBy() {
     return await withOracleDB(async (connection) => {
         try {
@@ -577,7 +566,6 @@ module.exports = {
     insertWritesContract,
     insertRecordLabel,
     updateWritesContract, 
-    countDemotable,
     joinTable,
     projectFromTable,
     groupBy,

@@ -8,14 +8,14 @@
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
     <link rel="stylesheet" href="styles.css">
 
-    <title>Database Application</title>
+    <title>Record Label Manager</title>
 </head>
 <body>
     <!-- ===================================================================================== -->
     <!-- Display the current status of the database connection. 
          !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
          -->
-    <h1>Database Connection Status: 
+    <h1>Record Label Manager: 
         <!-- An in-line placeholder to display connection status. -->
         <span id="dbStatus"> </span>
         <!-- A loading GIF, will be hided once get the status. -->
@@ -58,13 +58,6 @@
         </tbody>
     </table>
 
-    <br><hr><br> <!-- ========================================================================= -->
-
-    <h2>Reset Demotable</h2>
-    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
-    <button id="resetDemotable"> reset </button> <br>
-    <!-- A placeholder to display messages related to the reset operation. -->
-    <div id="resetResultMsg"></div>
 
     <br><hr><br> <!-- ========================================================================= -->
 
@@ -86,7 +79,7 @@
         
         <button type="submit"> insert </button> <br>
     </form>
-    <div id="insertResultMsg"></div>
+    <div id="insertArtistMsg"></div>
 
     <br><hr><br> <!-- ========================================================================= -->
 
@@ -102,22 +95,21 @@
         
         <button type="submit"> insert </button> <br>
     </form>
-    <div id="insertResultMsg"></div>
+    <div id="insertWritesMsg"></div>
 
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2>Update Writes Contract</h2>
-    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
     <form id="updateWritesContract" >
         <label for="updateKey">Choose a Key:</label>
         <select id="updateKey" name="updateKeys" onchange="updateDropdownId()">
-            <option value="startDate">start date</option>
-            <option value="endDate">end date</option>
+            <option value="startDate">Start Date</option>
+            <option value="endDate">End Date</option>
         </select>
         
     
-        Previous Value: <input type="date" id="oldValue" placeholder="Enter Old Value" required> <br><br>
-        New Value: <input type="date" id="newValue" placeholder="Enter New Value" maxlength="20"> <br><br>
+        Previous Date: <input type="date" id="oldValue" placeholder="Enter Old Value" required> <br><br>
+        New Date: <input type="date" id="newValue" placeholder="Enter New Value" maxlength="20"> <br><br>
 
         <button type="submit"> update </button> <br>
     </form>
@@ -223,14 +215,27 @@
                         th.textContent = column;
                         tableHeader.appendChild(th);
                     });
+                    
 
                     contractContent.forEach(user => {
                         const row = tableBody.insertRow();
                         user.forEach((field, index) => {
                             const cell = row.insertCell(index);
-                            cell.textContent = field;
+                            cell.textContent = transformDate(field);
                         });
                     });
+                }
+
+                function transformDate(input) {
+                    if (typeof input === "string" && Date.parse(input)) {
+                        const date = new Date(input)
+                        const formatDate = 
+                        `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+                        return formatDate;
+                    } else {
+                        return input;
+                    }
                 }
                 </script>
         
@@ -277,6 +282,7 @@
                 <option value=">">></option>
             </select>
             <input type="text" name="value" class="value" placeholder="Enter value">
+            <p>Please select an option below if more than one condition applies</p>
             <select name="logicalOperator" class="logicalOperator">
                 <option value=""></option>
                 <option value="AND">AND</option>
@@ -321,20 +327,11 @@
         </select>
         <button type="submit"> submit </button> <br>
         <div id="joinResultMsg"></div>
-
-        <div class="output" id="userSelection">Your selection will appear here...</div>
             
             <script>
                 function createDropDownValues(data) {
                 const element = document.getElementById('contractKey');
                 element.innerHTML='';
-
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Choose a Key';
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                element.appendChild(defaultOption);
 
                 
                     data.forEach(contractType => {
@@ -349,13 +346,7 @@
 
                 function handleSelection(event) {
                 const selectedValue = event.target.value;
-                const outputElement = document.getElementById('userSelection');
             
-                if (selectedValue) {
-                    outputElement.textContent = `You selected: ${selectedValue}`;
-                } else {
-                    outputElement.textContent = 'No selection made. Please choose an option.';
-                }
         }
             </script>
     </form>
@@ -379,11 +370,12 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2>Count the Tuples in DemoTable</h2>
-    <button id="countDemotable"> count </button> <br><br>
-    <!-- A placeholder to display the count result. -->
-    <div id="countResultMsg"></div> <br>
-
+   
+    <p>Warning: clicking below will reset the Record Label, Artist, and Contract tables</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+    
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>

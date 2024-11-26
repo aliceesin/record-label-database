@@ -98,14 +98,7 @@ async function fetchAndDisplayContract() {
     }
 
     mapDataToTable(contractContent, tableBody);
-    // contractContent.forEach(user => {
-    //     const row = tableBody.insertRow();
-    //     user.forEach((field, index) => {
-    //         const cell = row.insertCell(index);
-    //         cell.textContent = transformDate(field);
-            
-    //     });
-    // });
+    
 }
 
 async function deleteFromTable(event) {
@@ -127,11 +120,10 @@ async function deleteFromTable(event) {
     const responseData = await response.json();
     const messageElement = document.getElementById('deleteResultMsg');
 
-
-    if (responseData.key !== 0) {
+    if (responseData.success) {
         messageElement.textContent = "Data deleted successfully!";
     } else {
-        messageElement.textContent = "Data deleted unsuccessfully!";
+        messageElement.textContent = "Delete was unsuccessful!";
     }
 }
 
@@ -203,6 +195,7 @@ async function joinTable(event) {
                 whereValue: whereValue
             })
         });
+        console.log("r", response);
         const responseData = await response.json();
         const messageElement = document.getElementById('joinResultMsg');
     
@@ -220,13 +213,6 @@ async function joinTable(event) {
             }
         
             mapDataToTable(demotableContent, tableBody);
-            // demotableContent.forEach(user => {
-            //     const row = tableBody.insertRow();
-            //     user.forEach((field, index) => {
-            //         const cell = row.insertCell(index);
-            //         cell.textContent = field;
-            //     });
-            // });
             
         } else {
             messageElement.textContent = "Error processing data!";
@@ -258,7 +244,7 @@ async function resetDemotable() {
     }
 }
 
-// Inserts new records into the demotable.
+// Inserts new records into the artist table
 async function insertDemotable(event) {
     event.preventDefault();
 
@@ -280,7 +266,7 @@ async function insertDemotable(event) {
     });
 
     const responseData = await response.json();
-    const messageElement = document.getElementById('insertResultMsg');
+    const messageElement = document.getElementById('insertArtistMsg');
 
     if (responseData.success) {
         messageElement.textContent = "Data inserted successfully!";
@@ -309,13 +295,13 @@ async function insertRecordLabel(event) {
     });
 
     const responseData = await response.json();
-    const messageElement = document.getElementById('insertResultMsg');
+    const messageElement = document.getElementById('insertRecordMsg');
 
     if (responseData.success) {
         messageElement.textContent = "Data inserted successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error inserting data!" + responseData.messageElement;
+        messageElement.textContent = "Error inserting data! " + responseData.message;
     }
 }
 
@@ -348,7 +334,7 @@ async function insertWritesContract(event) {
     });
 
     const responseData = await response.json();
-    const messageElement = document.getElementById('insertResultMsg');
+    const messageElement = document.getElementById('insertWritesMsg');
 
     if (responseData.success) {
         messageElement.textContent = "Data inserted successfully!";
@@ -388,24 +374,6 @@ async function updateWritesContract(event) {
         fetchTableData();
     } else {
         messageElement.textContent = "Error updating values!";
-    }
-}
-
-// Counts rows in the demotable.
-// Modify the function accordingly if using different aggregate functions or procedures.
-async function countDemotable() {
-    const response = await fetch("/count-demotable", {
-        method: 'GET'
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('countResultMsg');
-
-    if (responseData.success) {
-        const tupleCount = responseData.count;
-        messageElement.textContent = `The number of tuples in demotable: ${tupleCount}`;
-    } else {
-        alert("Error in count demotable!");
     }
 }
 
@@ -566,7 +534,6 @@ window.onload = function() {
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     document.getElementById("updateWritesContract").addEventListener("submit", updateWritesContract);
-    document.getElementById("countDemotable").addEventListener("click", countDemotable);
     document.getElementById("insertRecordLabel").addEventListener("submit", insertRecordLabel);
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
     document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);

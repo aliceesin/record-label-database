@@ -17,8 +17,24 @@ router.get('/check-db-connection', async (req, res) => {
 
 router.delete('/deletetable', async (req, res) => {
     const {key, value} = req.body;
-    const tableContent = await appService.deleteFromTable(key, value);
-    res.json({data: tableContent});
+    try {
+        const tableContent = await appService.deleteFromTable(key, value);
+        console.log("tb", tableContent);
+        if (tableContent > 0) {
+            res.status(200).json({ 
+                success: true,  
+                data: tableContent
+            });
+        } else {
+            
+            res.status(500).json({ 
+                success: false, 
+                data: tableContent
+            });
+        }
+    } catch (error) {
+            console.error(error); 
+        }
 });
 
 router.post('/projecttable', async (req, res) => {
@@ -120,10 +136,11 @@ router.post("/insert-recordlabel", async (req, res) => {
     console.log("Request body:", req.body);
 
     const insertResult = await appService.insertRecordLabel(labelName, yearEstablished);
+    console.log("result", insertResult);
     if (insertResult) {
         res.json({ success: true });
     } else {
-        res.status(500).json({ success: false });
+        res.status(400).json({ success: false, message: "This is a duplicate. It has already been added." });
     }
 });
 
@@ -148,21 +165,6 @@ router.post("/update-writescontract", async (req, res) => {
         res.json({ success: true });
     } else {
         res.status(500).json({ success: false });
-    }
-});
-
-router.get('/count-demotable', async (req, res) => {
-    const tableCount = await appService.countDemotable();
-    if (tableCount >= 0) {
-        res.json({ 
-            success: true,  
-            count: tableCount
-        });
-    } else {
-        res.status(500).json({ 
-            success: false, 
-            count: tableCount
-        });
     }
 });
 
