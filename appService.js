@@ -118,19 +118,38 @@ async function joinTable(whereAttribute) {
 }
 
 // select 
-async function selection(whereAttribute) {
-    return await withOracleDB(async (connection) => {
-        
-        const query = `SELECT w2.stageName, w1.compensation
-         FROM WritesContract1 w1, WritesContract2 w2
-         WHERE w1.${whereAttribute} = w2.${whereAttribute}`
-        const result = await connection.execute(query);
-        return result.rows;
-    }). catch(() => {
-        console.error('Joining the two failed:', error);
+async function selection(attributes) {
+    try {
+        return await withOracleDB(async (connection) => {
+            const conditions = [];
+            const params = {};
+
+            attributes.forEach((condition, index) => {
+                const { column, operator, value, logicalOperator } = condition;
+                const paramName = `param${index}`;
+                conditions.push(`${column} ${operator} :${paramName}`);
+                params[paramName] = value;
+
+                if (logicalOperator) {
+                    conditions.push(logicalOperator);
+                }
+            });
+
+            const newAttributes = conditions.join(" ");
+
+            const query = `SELECT *
+                FROM Song
+                WHERE ${newAttributes}`;
+
+            const result = await connection.execute(query, params);
+            return result.rows;
+        });
+    } catch (error) {
+        console.error('Select failed:', error);
         throw error;
-    })
+    }
 }
+
 
 
 
@@ -545,5 +564,6 @@ module.exports = {
     groupBy,
     having,
     nestedGroupBy,
-    division
+    division,
+    selection
 };
