@@ -119,33 +119,105 @@ async function deleteFromTable(event) {
 async function projectTable(event) {
     event.preventDefault();
 
-    const projectKeys = Array.from(
-        document.querySelectorAll('input[name="projectTable"]:checked'))
+    const projectKeys = Array.from( document.querySelectorAll('input[name="projectTable"]:checked'))
         .map(checkbox => checkbox.value);
 
+    try {
         console.log("project keys", projectKeys);
+        if (projectKeys.length === 0) {
+            throw new Error;
+        }
 
-    const response = await fetch("/projecttable", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            key: projectKeys,
+        const response = await fetch("/projecttable", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                key: projectKeys,
+                
+            })
+        });
+        const responseData = await response.json();
+        console.log("responseData project", responseData);
+        const messageElement = document.getElementById('projectResultMessage');
+
+
+        if (responseData) {
+            messageElement.textContent = "Choices processed succesfully!";
+            displayProjectTable(projectKeys, responseData.data);
+        } else {
+            messageElement.textContent = "Error in processing choices!";
+        }
+        } catch (err) {
+            console.error("Error occurred:" + err);
+            messageElement = document.getElementById('projectResultMessage');
+            messageElement.textContent = `Error! Please select at least one column`
+        }  
+}
+
+async function fetchDropDownTable() {
+        const contractData = await fetch("/contractdata", {
+            method: 'GET'
+        });
+    
+        const contractDataObject = await contractData.json();
+        console.log("contract", contractDataObject.data);
+        const contractDataArray = contractDataObject.data;
+
+        createDropDownValues(contractDataArray);
+}
+
+async function joinTable(event) {
+    event.preventDefault();
+
+    const whereValue = document.querySelector('select[name="whereValue"]').value;
+    console.log("where value", whereValue);
+    try {
+
+        const response = await fetch("/jointable", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                whereValue: whereValue
+            })
+        });
+        const responseData = await response.json();
+        const messageElement = document.getElementById('joinResultMsg');
+    
+        console.log("resp data join", responseData);
+        if (responseData) {
+            messageElement.textContent = "Success!";
+            const tableElement = document.getElementById('jointabletable');
+            const tableBody = tableElement.querySelector('tbody');
+        
+            const demotableContent = responseData.data;
+        
+            // Always clear old, already fetched data before new fetching process.
+            if (tableBody) {
+                tableBody.innerHTML = '';
+            }
+        
+            demotableContent.forEach(user => {
+                const row = tableBody.insertRow();
+                user.forEach((field, index) => {
+                    const cell = row.insertCell(index);
+                    cell.textContent = field;
+                });
+            });
             
-        })
-    });
-    const responseData = await response.json();
-    console.log("responseData project", responseData);
-    const messageElement = document.getElementById('projectResultMessage');
-
-
-    if (responseData) {
-        messageElement.textContent = "Choices processed succesfully!";
-        displayProjectTable(projectKeys, responseData.data);
-    } else {
-        messageElement.textContent = "Error in processing choices!";
+        } else {
+            messageElement.textContent = "Error processing data!";
+        }
+    } catch (err) {
+            console.error("Error occurred:", err);
+            const messageElement = document.getElementById('joinResultMsg');
+            messageElement.textContent = `Error Processing data: ${err.message}`;
+        
     }
+    
 }
 
 
@@ -485,12 +557,16 @@ window.onload = function() {
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
     document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);
     document.getElementById("projectTable").addEventListener("submit", projectTable);
+
     document.getElementById("runGroupBy").addEventListener("click", runGroupBy);
     document.getElementById("runHaving").addEventListener("click", runHaving);
     document.getElementById("runNestedGroupBy").addEventListener("click", runNestedGroupBy);
     document.getElementById("runDivision").addEventListener("click", runDivision);
     document.getElementById("submitQuery").addEventListener("click", runSelection);
     document.getElementById("addCondition").addEventListener("click", addCondition);
+
+    document.getElementById("joinTable").addEventListener("submit", joinTable);
+
 
 
 };
@@ -500,5 +576,6 @@ window.onload = function() {
 function fetchTableData() {
     fetchAndDisplayUsers();
     fetchAndDisplayContract();
+    fetchDropDownTable();
 
 }

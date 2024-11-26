@@ -240,6 +240,7 @@
         </tbody>
     </table>
 
+
     <br><hr><br> <!-- ========================================================================= -->
 
     <button id="runHaving">Run HAVING Query</button>
@@ -307,6 +308,73 @@
         </table>
         <p id="selectionResultMsg"></p>
     </div>
+
+
+    
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> A better look at contract details</h2>
+    <form id="joinTable" >
+        <p>View the artist name and salary based on the contract type</p>
+        <label for="contractKey">Select a contract type:</label>
+        <select id="contractKey" name="whereValue" onchange="handleSelection(event)">
+        </select>
+        <button type="submit"> submit </button> <br>
+        <div id="joinResultMsg"></div>
+
+        <div class="output" id="userSelection">Your selection will appear here...</div>
+            
+            <script>
+                function createDropDownValues(data) {
+                const element = document.getElementById('contractKey');
+                element.innerHTML='';
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Choose a Key';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                element.appendChild(defaultOption);
+
+                
+                    data.forEach(contractType => {
+                        const option = document.createElement('option');
+                        option.value = contractType;
+                        option.textContent = contractType;
+                        element.appendChild(option)
+                
+                        });
+                
+                }
+
+                function handleSelection(event) {
+                const selectedValue = event.target.value;
+                const outputElement = document.getElementById('userSelection');
+            
+                if (selectedValue) {
+                    outputElement.textContent = `You selected: ${selectedValue}`;
+                } else {
+                    outputElement.textContent = 'No selection made. Please choose an option.';
+                }
+        }
+            </script>
+    </form>
+    
+
+
+    <h2>Results</h2>
+    <table id="jointabletable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>Stage Name</th>
+                <th>Compensation</th>
+        
+            </tr> 
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
 
     <br><hr><br> <!-- ========================================================================= -->
