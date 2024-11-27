@@ -55,8 +55,10 @@ FOREIGN KEY (role) REFERENCES EmploysEmployee1 (role)
 
 
 CREATE TABLE WritesContract1(
-	type 			VARCHAR2(50) 	PRIMARY KEY,
-	compensation		INT		NOT NULL
+	type 			VARCHAR2(50),
+	stageName		VARCHAR2(50),
+	compensation		INT		NOT NULL,
+	PRIMARY KEY(type, stageName)
 );
 
 
@@ -84,13 +86,14 @@ CREATE TABLE ArtistSigns2(
 CREATE TABLE WritesContract2(
 	contractID		VARCHAR2(50) 	PRIMARY KEY,
 	type			VARCHAR2(50) 	NOT NULL,
-	stageName		VARCHAR2(50) 	UNIQUE NOT NULL,
+	stageName		VARCHAR2(50) 	NOT NULL,
 	labelName		VARCHAR2(50) 	NOT NULL,
 	startDate 		DATE		NOT NULL,
-	endDate			DATE,		
+	endDate			DATE,
+	UNIQUE (type, stageName),		
 	FOREIGN KEY (labelName) REFERENCES RecordLabel(labelName) ON DELETE CASCADE,
 	FOREIGN KEY (stageName) REFERENCES ArtistSigns2(stageName),
-	FOREIGN KEY (type) REFERENCES WritesContract1 (type) ON DELETE CASCADE
+	FOREIGN KEY (type, stageName) REFERENCES WritesContract1 (type, stageName) ON DELETE CASCADE
 );
 
 CREATE TABLE MusicProfessional(
@@ -307,11 +310,12 @@ INSERT INTO EmploysEmployee3 VALUES ('E134', 'Minerva McGonagall', '333-441-555'
 INSERT INTO EmploysEmployee3 VALUES ('E135', 'Ginny Weasley', '444-551-666', TO_DATE('2021-05-02', 'YYYY-MM-DD'), 'Universal Music', 'Sales Manager');
 INSERT INTO EmploysEmployee3 VALUES ('E136', 'Cho Chang', '555-661-777', TO_DATE('2022-06-18', 'YYYY-MM-DD'), 'Atlantic Records', 'Social Media Manager');
 
-INSERT INTO WritesContract1 VALUES ('Exclusive', 1000000);
-INSERT INTO WritesContract1 VALUES ('Non-Exclusive', 750000);
-INSERT INTO WritesContract1 VALUES ('Single-Album Deal', 500000);
-INSERT INTO WritesContract1 VALUES ('Multi-Album Deal', 2000000);
-INSERT INTO WritesContract1 VALUES ('Tour Support', 300000);
+INSERT INTO WritesContract1 VALUES ('Exclusive', 'Taylor Swift', 1000000);
+INSERT INTO WritesContract1 VALUES ('Non-Exclusive', 'Ariana Grande', 750000);
+INSERT INTO WritesContract1 VALUES ('Single-Album Deal', 'Bruno Mars', 500000);
+INSERT INTO WritesContract1 VALUES ('Multi-Album Deal', 'Lady Gaga', 2000000);
+INSERT INTO WritesContract1 VALUES ('Tour Support', 'Billie Eilish', 300000);
+INSERT INTO WritesContract1 VALUES ('Tour Support', 'Sabrina Carpenter', 250000);
 
 INSERT INTO ArtistSigns1 VALUES ('Taylor Swift', TO_DATE('1989-12-13', 'YYYY-MM-DD'));
 INSERT INTO ArtistSigns1 VALUES ('Ariana Grande-Butera', TO_DATE('1993-06-26', 'YYYY-MM-DD'));

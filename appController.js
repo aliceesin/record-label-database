@@ -55,8 +55,16 @@ router.get('/contractdata', async (req, res) => {
     res.json({data: tableContent});
 });
 
-router.get('/demotable', async (req, res) => {
-    const tableContent = await appService.fetchDemotableFromDb();
+// router.get('/demotable', async (req, res) => {
+//     const tableContent = await appService.fetchDemotableFromDb();
+//     res.json({data: tableContent});
+// });
+
+router.post('/demotable', async (req, res) => {
+    const tableName = req.body.tableName;
+    console.log("table name", tableName);
+    const tableContent = await appService.fetchDemotableFromDb(tableName);
+    console.log("tablecontent", tableContent);
     res.json({data: tableContent});
 });
 
@@ -108,25 +116,20 @@ router.get('/division', async (req, res) => {
 });
 
 
-router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
 router.post("/insert-demotable", async (req, res) => {
     
     const { legalName, dateOfBirth, stageName} = req.body;
     console.log("Request body:", req.body);
 
     const insertResult = await appService.insertDemotable(legalName, dateOfBirth, stageName);
-    if (insertResult) {
+    console.log("artist insert result", insertResult);
+    console.log("artist insert result table", insertResult.table);
+    if (insertResult.status === "success") {
         res.json({ success: true });
+    } else if (insertResult.status === "duplicate") {
+        res.status(400).json({ success: false, message: "This is a duplicate entry. It has already been added in " + insertResult.table})
     } else {
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: "Error inserting into " + insertResult.table });
     }
 });
 
@@ -137,10 +140,12 @@ router.post("/insert-recordlabel", async (req, res) => {
 
     const insertResult = await appService.insertRecordLabel(labelName, yearEstablished);
     console.log("result", insertResult);
-    if (insertResult) {
-        res.json({ success: true });
-    } else {
+    if (insertResult === "success") {
+        res.status(200).json({ success: true });
+    } else if (insertResult === "duplicate") {
         res.status(400).json({ success: false, message: "This is a duplicate. It has already been added." });
+    } else {
+        res.status(500).json({ success: false, message: "Error inserting into record label" });
     }
 });
 
@@ -150,10 +155,14 @@ router.post("/insert-writescontract", async (req, res) => {
     console.log("Request body:", req.body);
 
     const insertResult = await appService.insertWritesContract(type, compensation, contractID, stageName, labelName, startDate, endDate);
-    if (insertResult) {
-        res.json({ success: true });
+    console.log("controller result", insertResult);
+    console.log("controller result status", insertResult.status);
+    if (insertResult.status === "success") {
+        res.status(200).json({ success: true });
+    } else if (insertResult.status === "duplicate") {
+        res.status(400).json({ success: false, message: "This is a duplicate entry. It has already been added in " + insertResult.table})
     } else {
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: "Error inserting into " + insertResult.table });
     }
 });
 

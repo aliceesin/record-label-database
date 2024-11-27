@@ -37,16 +37,18 @@ async function checkDbConnection() {
 
 // Transforms date to YYYY-MM-DD format 
 function transformDate(input) {
-    if (typeof input === "string" && Date.parse(input)) {
-        const date = new Date(input)
-        const formatDate = 
-        `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
-        return formatDate;
-    } else {
-        return input;
+    const oracleDateFormat = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}\.\d{3}Z?)?$/;
+    if (typeof input === "string" && oracleDateFormat.test(input)) {
+        const date = new Date(input);
+        if (!isNaN(date)) {
+            const formatDate = 
+            `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+            return formatDate;
+        }
     }
+    return input; 
 }
+
 
 function mapDataToTable(demotableContent, tableBody) {
     demotableContent.forEach(user => {
@@ -62,9 +64,17 @@ function mapDataToTable(demotableContent, tableBody) {
 async function fetchAndDisplayUsers() {
     const tableElement = document.getElementById('demotable');
     const tableBody = tableElement.querySelector('tbody');
+    const tableName = 'ArtistSigns1';
 
     const response = await fetch('/demotable', {
-        method: 'GET'
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tableName: tableName
+            
+        })
     });
 
     const responseData = await response.json();
@@ -227,23 +237,6 @@ async function joinTable(event) {
 }
 
 
-
-// This function resets or initializes the demotable.
-async function resetDemotable() {
-    const response = await fetch("/initiate-demotable", {
-        method: 'POST'
-    });
-    const responseData = await response.json();
-
-    if (responseData.success) {
-        const messageElement = document.getElementById('resetResultMsg');
-        messageElement.textContent = "demotable initiated successfully!";
-        fetchTableData();
-    } else {
-        alert("Error initiating table!" + responseData);
-    }
-}
-
 // Inserts new records into the artist table
 async function insertDemotable(event) {
     event.preventDefault();
@@ -272,38 +265,39 @@ async function insertDemotable(event) {
         messageElement.textContent = "Data inserted successfully!";
         fetchTableData();
     } else {
-        messageElement.textContent = "Error inserting data!" + responseData.messageElement;
-    }
-}
-
-async function insertRecordLabel(event) {
-    event.preventDefault();
-
-    const labelName = document.getElementById('labelName').value;
-    const yearEstablished = document.getElementById('yearEstablished').value;
-    
-    const response = await fetch('/insert-recordlabel', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            labelName: labelName,
-            yearEstablished: yearEstablished,
-            
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('insertRecordMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Data inserted successfully!";
-        fetchTableData();
-    } else {
         messageElement.textContent = "Error inserting data! " + responseData.message;
     }
 }
+
+// async function insertRecordLabel(event) {
+//     event.preventDefault();
+
+//     const labelName = document.getElementById('labelName').value;
+//     const yearEstablished = document.getElementById('yearEstablished').value;
+    
+//     const response = await fetch('/insert-recordlabel', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             labelName: labelName,
+//             yearEstablished: yearEstablished,
+            
+//         })
+//     });
+
+//     const responseData = await response.json();
+//     const messageElement = document.getElementById('insertRecordMsg');
+//     console.log("responseData", responseData);
+
+//     if (responseData.success) {
+//         messageElement.textContent = "Data inserted successfully!";
+//         fetchTableData();
+//     } else {
+//         messageElement.textContent = "Error inserting data! " + responseData.message;
+//     }
+// }
 
 
 async function insertWritesContract(event) {
@@ -335,13 +329,13 @@ async function insertWritesContract(event) {
 
     const responseData = await response.json();
     const messageElement = document.getElementById('insertWritesMsg');
+    console.log("resp", responseData);
 
     if (responseData.success) {
         messageElement.textContent = "Data inserted successfully!";
         fetchTableData();
     } else {
-        alert("Need to first add artist information!");
-        messageElement.textContent = "Error inserting data!" + responseData.messageElement;
+        messageElement.textContent = "Error inserting data! " + responseData.message;
     }
 }
 
@@ -528,13 +522,14 @@ function addCondition() {
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
+
+
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
-    document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     document.getElementById("updateWritesContract").addEventListener("submit", updateWritesContract);
-    document.getElementById("insertRecordLabel").addEventListener("submit", insertRecordLabel);
+    // document.getElementById("insertRecordLabel").addEventListener("submit", insertRecordLabel);
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
     document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);
     document.getElementById("projectTable").addEventListener("submit", projectTable);

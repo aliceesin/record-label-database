@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="styles.css">
+
+<!-- secondPage.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+<body>
+    <!-- Your HTML content -->
+</body>
+</html>
+
+
+<h1>Manage Record Labels</h1>
+<a href="index.html"><button>Back</button></a>
+
+
+<h2>Show Artist Labels</h2>
+    <table id="recordtable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>Record Label Name</th>
+                <th>Year Established</th>
+        
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+    <h2> Insert Values into RecordLabel </h2>
+    <form id="insertRecordLabel">
+        Label Name : <input type="text" id="labelName" placeholder="Enter label name" required maxlength="20" > <br><br>
+        Year Established: <input type="number" id="yearEstablished" placeholder="Enter year" min="1900" max="2100"> <br><br>
+        <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertRecordMsg"></div>
+
+    <!-- ===================================================================================== -->
+    <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
+    <script src="label.js"></script>
