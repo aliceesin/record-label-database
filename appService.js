@@ -143,8 +143,10 @@ async function selection(attributes) {
 
                 if (column === "releaseDate") {
                     conditions.push(`${column} ${operator} TO_DATE(:${paramName}, 'YYYY-MM-DD')`);
-                } else {
+                } else if (column === "duration") {
                     conditions.push(`${column} ${operator} :${paramName}`);
+                } else {
+                    conditions.push(`UPPER(${column}) ${operator} UPPER(:${paramName})`);
                 }
                 params[paramName] = value;
 
