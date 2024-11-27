@@ -445,11 +445,11 @@ async function groupBy() {
     return await withOracleDB(async (connection) => {
         try {
             const result = await connection.execute(
-                `SELECT stageName, title, MIN(numTracks)
+                `SELECT stageName, professionalName, MAX(numTracks)
 FROM Album 
-WHERE professionalName = 'Jack Antonoff'
-GROUP BY stageName, title 
-`
+WHERE numTracks <15
+GROUP BY stageName, professionalName
+ORDER BY stageName`
             );
             console.log(result.rows);
             return result.rows;
@@ -459,7 +459,6 @@ GROUP BY stageName, title
         }
     })
 }
-
 async function having() {
     return await withOracleDB(async (connection) => {
         try {
