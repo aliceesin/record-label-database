@@ -305,7 +305,7 @@ async function insertRecordLabel(labelName, yearEstablished) {
             });
 }
 
-async function insertWritesContract1 (type, stageName, compensation) {
+async function insertWritesContract1(type, stageName, compensation) {
     return await withOracleDB(async (connection) => {
         try {
             await connection.execute(
@@ -314,17 +314,21 @@ async function insertWritesContract1 (type, stageName, compensation) {
                 { autoCommit: true }
             );
             console.log(`Successfully inserted into WritesContract1`);
-            return "success"
+            return "success";  
         } catch (error) {
-            if (error.errorNum === 1) { 
-                return "duplicate";
+            if (error.errorNum === 1) {
+                return "duplicate";  
+            } else if (error.errorNum === 2291) {
+                console.log(`Foreign key constraint violated: Parent contractID not found`);
+                return "parentKeyNotFound";  
             } else {
-                console.error('Error in WritesContract1:', error);
-                throw error;
+                console.error('Unexpected Error:', error);  
+                throw error; 
             }
         }
     });
 }
+
 
 async function insertWritesContract2 (contractID, type, stageName, labelName, startDate, endDate) {
     return await withOracleDB(async (connection) => {
@@ -345,35 +349,44 @@ async function insertWritesContract2 (contractID, type, stageName, labelName, st
             console.log(`Successfully inserted into WritesContract2`);
             return "success"
         } catch (error) {
-            if (error.errorNum === 1) { 
-                return "duplicate";
+            if (error.errorNum === 1) {
+                return "duplicate";  
+            } else if (error.errorNum === 2291) {  
+                console.log(`Foreign key constraint violated: Parent contractID not found 2`);
+                return "parentKeyNotFound";
             } else {
-            console.error('Error in WritesContract2:', error);
-            throw error;
+                console.error('Error in WritesContract2:', error);
+                throw error;  
             }
         }
     });
 }
 
-async function insertWritesContract (type, compensation, contractID, stageName, labelName, startDate, endDate) {
+async function insertWritesContract(type, compensation, contractID, stageName, labelName, startDate, endDate) {
     try {
 
         const e1InsertResult = await insertWritesContract1(type, stageName, compensation);
         console.log("write contract 1 result: ", e1InsertResult);
+
         if (e1InsertResult === "duplicate") {
             return { status: "duplicate", table: "WritesContract1" };
+        } else if (e1InsertResult === "parentKeyNotFound") {
+            return { status: "parentKeyNotFound", table: "WritesContract1" };
         } else if (e1InsertResult !== "success") {
             throw new Error("Failed to insert into WritesContract1.");
         }
 
         const e2InsertResult = await insertWritesContract2(contractID, type, stageName, labelName, startDate, endDate);
-        console.log("write contract 2 result: ", e1InsertResult);
+        console.log("write contract 2 result: ", e2InsertResult); 
 
-        if (e2InsertResult === "duplicate") {
+        if (e2InsertResult === "duplicate") {  
             return { status: "duplicate", table: "WritesContract2" };
-        } else if (e2InsertResult !== "success") {
+        } else if (e2InsertResult === "parentKeyNotFound") {  
+            return { status: "parentKeyNotFound", table: "WritesContract2" };
+        } else if (e2InsertResult !== "success") {  
             throw new Error("Failed to insert into WritesContract2.");
         }
+
         return { status: "success" };
 
     } catch (error) {
@@ -381,6 +394,7 @@ async function insertWritesContract (type, compensation, contractID, stageName, 
         throw error;
     }
 }
+
 
 async function insertDemotable(legalName, dateOfBirth, stageName) {
     try {
@@ -405,13 +419,14 @@ async function insertDemotable(legalName, dateOfBirth, stageName) {
     }
 }
 
-
+/* UPDATE */
+/** We are using Oracle as our DBMS so it cannot compute ON UPDATE CASCADE
+ * However, this relation has a UNIQUE constraint and has multiple Foreign Keys 
+ * Only start date and end date was implemented for update as all the other
+ * attributes were foreign keys that cascades on update (stageName, labelName, type)
+ */
 async function updateWritesContract(key, oldValue, newValue) {
     return await withOracleDB(async (connection) => {
-        console.log("key", key);
-        console.log("old", oldValue);
-        console.log("new", newValue);
- 
         const result = await connection.execute(
             `UPDATE WritesContract2 
              SET ${key} = TO_DATE(:newValue, 'YYYY-MM-DD') 

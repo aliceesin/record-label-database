@@ -16,7 +16,7 @@
 <a href="index.html"><button>Back</button></a>
 
 
-<h2>Show Artist Labels</h2>
+<h2>Show Record Labels</h2>
     <table id="recordtable" border="1">
         <thead>
             <tr>
@@ -29,16 +29,43 @@
         <tbody>
         </tbody>
     </table>
+    <br><hr><br> <!-- ========================================================================= -->
 
 
 
-    <h2> Insert Values into RecordLabel </h2>
+    <h2> Add a new Record Label </h2>
     <form id="insertRecordLabel">
         Label Name : <input type="text" id="labelName" placeholder="Enter label name" required maxlength="20" > <br><br>
         Year Established: <input type="number" id="yearEstablished" placeholder="Enter year" min="1900" max="2100"> <br><br>
         <button type="submit"> insert </button> <br>
     </form>
     <div id="insertRecordMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Delete a Record Label </h2>
+    <form id="deleteFromTable" >
+        <label for="deleteKeys">Choose a Key:</label>
+        <select id="deleteKeys" name="deleteKey" onchange="updateDropdownId()">
+            <option value="labelName">Label Name</option>
+            <option value="yearEstablished">Year Established</option>
+        </select>
+        Value to delete: <input type="text" id="deleteValue" placeholder="Enter value to delete" required> <br><br>
+
+        <button type="click"> delete </button> <br>
+    </form>
+
+    <script>
+        function updateDropdownId() {
+            
+            const dropdown = document.getElementById('deleteKeys');
+            const selectedValue = dropdown.value;
+
+            dropdown.id = selectedValue;
+        }
+    </script>
+    
+    <div id="deleteResultMsg"></div>
 
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->

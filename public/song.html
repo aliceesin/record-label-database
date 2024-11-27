@@ -1,0 +1,169 @@
+<link rel="stylesheet" href="styles.css">
+
+<!-- secondPage.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+<body>
+    <!-- Your HTML content -->
+</body>
+</html>
+
+<h1>Album-Song Information</h1>
+<a href="index.html"><button>Back</button></a>
+
+
+<h2>Song Searcher</h2>
+    <div id="selectionForm">
+        <div class="condition">
+            <select name="attribute" class="attribute">
+                <option value="releaseDate">Release Date (YYYY-MM-DD)</option>
+                <option value="duration">Length (seconds)</option>
+                <option value="genre">Genre</option>
+                <option value="stageName">Artist</option>
+            </select>
+            <select name="operator" class="operator">
+                <option value="=">=</option>
+                <option value="<"><</option>
+                <option value=">">></option>
+            </select>
+            <input type="text" name="value" class="value" placeholder="Enter value">
+            <p>Please select an option below if more than one condition applies</p>
+            <select name="logicalOperator" class="logicalOperator">
+                <option value=""></option>
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+            </select>
+        </div>
+        <button id="addCondition">Add Condition</button>
+        <button id="submitQuery">Run Query</button>
+    </div>
+    <div id="errorMessages" style="color: red; margin-top: 10px;"></div>
+    <div id="queryResults"></div>
+
+    <div>
+        <table id="selectionTable" border="1">
+            <thead>
+            <tr>
+                <th>ISRC</th>
+                <th>Title</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Duration (seconds)</th>
+                <th>Artist</th>
+                <th>Recording Date</th>
+                <th>Studio</th>
+                <th>Location</th>
+                <th>UPC</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="selectionResultMsg"></p>
+    </div>
+    <br><hr><br> <!-- ========================================================================= -->
+    <h3>Find out more information about our database! </h3>
+
+    Click below to find the number of albums each artist has that is over 9 tracks in length, assuming the artist has more than 1 album with over 9 tracks.
+    <br><br>
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 2px;">
+
+    <button id="runHaving">Run HAVING Query</button></div>
+    <br><br>
+    <div id="havingMsg"></div>
+    <div>
+        <table id="havingTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Number of Albums</th>
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    Amongst an artist’s albums that are produced by Jack Antonoff, find the album with the minimum number of tracks and return the artist name, album title, and the number of tracks that album has. Artists without an album produced by Jack Antonoff will not appear.
+    <br><br>
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 2px;">
+
+    <button id="runGroupBy">Run GROUP BY Query</button></div>
+    <br><br>
+    <div id="groupByMsg"></div>
+    <div>
+        <table id="groupByTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Number of Tracks</th>
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    Find the names and average number of tracks per album for producers who have a higher than average number of tracks per album across all albums in the database.
+    <br><br>
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 2px;">
+
+    <button id="runNestedGroupBy" >Run Nested GROUP BY Query</button></div>
+    <br><br>
+    <div id="nestedGroupByMsg"></div>
+    <div>
+        <table id="nestedGroupByTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Average Number of Tracks</th>
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    Find all artists that have at least one song of each genre across all songs in the database on a single album.
+    <br><br>
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 2px;">
+
+    <button id="runDivision">Run Division Query</button></div>
+    <br><br>
+    <div id="divisionMsg"></div>
+    <div>
+        <table id="divisionTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    
+
+
+    
+    
+
+    <!-- ===================================================================================== -->
+    <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
+    <script src="song.js"></script>
+
+
+
+</body>
+</html>

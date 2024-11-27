@@ -143,7 +143,7 @@ router.post("/insert-recordlabel", async (req, res) => {
     if (insertResult === "success") {
         res.status(200).json({ success: true });
     } else if (insertResult === "duplicate") {
-        res.status(400).json({ success: false, message: "This is a duplicate. It has already been added." });
+        res.status(400).json({ success: false, message: "This is a duplicate. It has already been added previously." });
     } else {
         res.status(500).json({ success: false, message: "Error inserting into record label" });
     }
@@ -161,6 +161,8 @@ router.post("/insert-writescontract", async (req, res) => {
         res.status(200).json({ success: true });
     } else if (insertResult.status === "duplicate") {
         res.status(400).json({ success: false, message: "This is a duplicate entry. It has already been added in " + insertResult.table})
+    } else if (insertResult.status === "parentKeyNotFound") {
+        res.status(500).json({ success: false, message: "Either record label, artist name, or contract type has not been added previously."})
     } else {
         res.status(500).json({ success: false, message: "Error inserting into " + insertResult.table });
     }

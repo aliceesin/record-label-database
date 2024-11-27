@@ -2,7 +2,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     padding: 40px;
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
     line-height: 1.6;
     background-color: #fffef5f9;
@@ -12,6 +12,11 @@ body {
 hr {
     border-top: 2px solid rgb(44, 51, 62);
     margin: auto;
+}
+
+h1 {
+   text-align:center;
+   size: 80px;
 }
 
 /* TABLE STYLES */
@@ -43,23 +48,26 @@ tr:hover {
 }
 
 button {
-    background-color: rgb(32, 107, 227);
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
+    font-size: 16px; 
+    font-weight: 600; 
+    padding: 12px 24px; 
+    border: 2px solid #333; 
+    background-color: transparent; 
+    color: #333; 
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    outline: none;
+    transition: all 0.2s ease; 
+    outline: none; 
 }
 
 button:hover {
-    background-color: rgb(22, 87, 207);
+    background-color: #333; 
+    color: #fff;
 }
 
-button:active {
-    background-color: rgb(12, 67, 187);
+.simple-button:focus {
+    border-color: #ff7e5f; 
 }
 
 /* INPUT STYLES */
@@ -118,6 +126,14 @@ select:focus {
     vertical-align: middle;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 50vh;
+}
+
 /* PROJECTION PORTION */
 
 #projectTable div {
@@ -141,8 +157,8 @@ select:focus {
 }
 
 #projectTable input[type="checkbox"]:checked {
-    background-color: #007BFF;
-    border-color: #007BFF; 
+    background-color: #052f5b;
+    border-color: #052f5b; 
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -157,6 +173,22 @@ select:focus {
     color: #333;
     white-space: nowrap;
 }
+
+.overall-title {
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
+    font-size: 4rem; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    letter-spacing: 5px;
+    color: #333; 
+    text-align: center; 
+    padding: 30px 0;
+    margin: 0; 
+    position: relative;
+    transition: all 0.3s ease-in-out; 
+}
+
+
 
 
 

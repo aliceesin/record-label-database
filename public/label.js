@@ -83,8 +83,36 @@ function mapDataToTable(demotableContent, tableBody) {
     });
 }
 
+async function deleteFromTable(event) {
+    event.preventDefault();
+
+    const deleteKeyValue = document.querySelector('select[name="deleteKey"]').value;
+    const valValue = document.getElementById('deleteValue').value;
+
+    const response = await fetch("/deletetable", {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            key: deleteKeyValue,
+            value: valValue
+        })
+    });
+    const responseData = await response.json();
+    const messageElement = document.getElementById('deleteResultMsg');
+
+    if (responseData.success) {
+        messageElement.textContent = "Data deleted successfully!";
+    } else {
+        messageElement.textContent = "Delete was unsuccessful!";
+    }
+}
+
+
+
 window.onload = function() {
-    
+    document.getElementById("deleteFromTable").addEventListener("submit", deleteFromTable);
     document.getElementById("insertRecordLabel").addEventListener("submit", insertRecordLabel);
     fetchAndDisplay();
     
