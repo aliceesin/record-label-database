@@ -425,9 +425,86 @@ async function checkDbConnection() {
 
 //         const resultData = responseData.data;
 
+<<<<<<< Updated upstream
 //         if (tableBody) {
 //             tableBody.innerHTML = "";
 //         }
+=======
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
+    } else {
+        alert("Error!");
+    }
+
+}
+async function runSelection(event) {
+    event.preventDefault();
+
+    const conditionBlocks = document.querySelectorAll(".condition");
+    const conditions = [];
+    const messageElement = document.getElementById("selectionResultMsg");
+    messageElement.textContent = "";
+
+    try {
+        conditionBlocks.forEach((block, index) => {
+            const column = block.querySelector(".attribute").value;
+            const operator = block.querySelector(".operator").value;
+            const value = block.querySelector(".value").value.trim();
+            const logicalOperator = index < conditionBlocks.length - 1
+                ? block.querySelector(".logicalOperator").value
+                : null;
+
+            if (column && operator && value) {
+                conditions.push({ column, operator, value, logicalOperator });
+            }
+
+
+            if (conditions.length > 1) {
+                const logicalOperatorCount = conditions.filter(cond => cond.logicalOperator).length;
+                if (logicalOperatorCount < conditions.length - 1) {
+                    throw new Error("Missing AND/OR!");
+                }
+            }
+
+
+            if (!column || !operator || !value) {
+                throw new Error("Please fill out all fields!");
+            }
+        });
+
+
+        const response = await fetch("/selection", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ attributes: conditions }),
+        });
+
+        const responseData = await response.json();
+
+        if (responseData && responseData.data.length > 0) {
+            messageElement.textContent = "Success!";
+            const tableElement = document.getElementById("selectionTable");
+            const tableBody = tableElement.querySelector("tbody");
+
+            if (tableBody) {
+                tableBody.innerHTML = "";
+            }
+
+            mapDataToTable(responseData.data, tableBody);
+        } else {
+            messageElement.textContent = "No results found.";
+        }
+    } catch (err) {
+        console.error("Error occurred:", err);
+        messageElement.textContent = err.message || "An error occurred.";
+    }
+}
+>>>>>>> Stashed changes
 
 //         mapDataToTable(resultData, tableBody);
 //     } else {

@@ -27,6 +27,336 @@
         <a href="song.html"><button>Discover Album-Song Information</button></a>
     </div>
     
+<<<<<<< Updated upstream
+=======
+        Previous Date: <input type="date" id="oldValue" placeholder="Enter Old Value" required> <br><br>
+        New Date: <input type="date" id="newValue" placeholder="Enter New Value" maxlength="20"> <br><br>
+
+        <button type="submit"> update </button> <br>
+    </form>
+
+    <script>
+        function updateDropdownId() {
+            const dropdown = document.getElementById('updateKey');
+            const selectedValue = dropdown.value;
+    
+            // Update the id of the dropdown itself
+            dropdown.id = selectedValue;
+        }
+    </script>
+
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateNameResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Delete values from Record Label</h2>
+    <form id="deleteFromTable" >
+        <label for="deleteKeys">Choose a Key:</label>
+        <select id="deleteKeys" name="deleteKey" onchange="updateDropdownId()">
+            <option value="labelName">Label Name</option>
+            <option value="yearEstablished">Year Established</option>
+        </select>
+        Value to delete: <input type="text" id="deleteValue" placeholder="Enter value to delete" required> <br><br>
+
+        <button type="click"> delete </button> <br>
+    </form>
+
+    <script>
+        function updateDropdownId() {
+            
+            const dropdown = document.getElementById('deleteKeys');
+            const selectedValue = dropdown.value;
+
+            dropdown.id = selectedValue;
+        }
+    </script>
+    
+    <div id="deleteResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Choose the columns to view in contracts</h2>
+    <form id="projectTable" >
+        <div>
+            <input type="checkbox" id="contractID" name="projectTable" value="contractID" />
+            <label for="contractID">Contract ID</label>
+          </div>
+          <div>
+            <input type="checkbox" id="type" name="projectTable" value="type" />
+            <label for="type">Contract Type</label>
+          </div>
+          <div>
+            <input type="checkbox" id="stageName" name="projectTable" value="stageName" />
+            <label for="stageName">Stage Name</label>
+          </div>
+          <div>
+            <input type="checkbox" id="labelName" name="projectTable" value="labelName" />
+            <label for="labelName">Label Name</label>
+          </div>
+          <div>
+            <input type="checkbox" id="startDate" name="projectTable" value="startDate" />
+            <label for="startDate">Start Date</label>
+          </div>
+          <div>
+            <input type="checkbox" id="endDate" name="projectTable" value="endDate" />
+            <label for="endDate">End Date</label>
+          </div>
+
+          <div>
+            <button type="submit">Submit choices</button>
+          </div>
+        </form>
+
+    <div id="projectResultMessage"></div>
+
+    <h2>Show Projected Table</h2>
+    <table id="showProjectTable" border="1">
+        <thead>
+            <tr id="tableHeaderRow">
+                <script>
+                    function displayProjectTable(columns, data) {
+                    const tableElement = document.getElementById('showProjectTable');
+                    const tableHeader = tableElement.querySelector('thead tr');
+                    const tableBody = tableElement.querySelector('tbody');
+
+                    const contractContent = data;
+
+                    // Always clear old, already fetched data before new fetching process.
+                    if (tableBody) {
+                        tableBody.innerHTML = '';
+                    }
+
+                    if (tableHeader) {
+                        tableHeader.innerHTML = '';
+                    }
+
+                    columns.forEach(column => {
+                        const th = document.createElement('th');
+                        th.textContent = column;
+                        tableHeader.appendChild(th);
+                    });
+                    
+
+                    contractContent.forEach(user => {
+                        const row = tableBody.insertRow();
+                        user.forEach((field, index) => {
+                            const cell = row.insertCell(index);
+                            cell.textContent = transformDate(field);
+                        });
+                    });
+                }
+
+                function transformDate(input) {
+                    if (typeof input === "string" && Date.parse(input)) {
+                        const date = new Date(input)
+                        const formatDate = 
+                        `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+                        return formatDate;
+                    } else {
+                        return input;
+                    }
+                }
+                </script>
+        
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+    Find the number of albums each artist has that is over 9 tracks in length, assuming the artist has more than 1 album with over 9 tracks.
+    <br><br>
+    <button id="runHaving">Run HAVING Query</button>
+    <br><br>
+    <div id="havingMsg"></div>
+    <div>
+        <table id="havingTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Number of Albums</th>
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    For each artist, find the maximum number of tracks on an album under 15 tracks they have made with each producer.
+    <br><br>
+    <button id="runGroupBy">Run GROUP BY Query</button>
+    <br><br>
+    <div id="groupByMsg"></div>
+    <div>
+        <table id="groupByTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Producer</th>
+                <th>Number of Tracks</th>
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    Find the names and average number of tracks per album for producers who have a higher than average number of tracks per album across all albums in the database.
+    <br><br>
+    <button id="runNestedGroupBy" >Run Nested GROUP BY Query</button>
+    <br><br>
+    <div id="nestedGroupByMsg"></div>
+    <div>
+        <table id="nestedGroupByTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Average Number of Tracks</th>
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    Find all artists that have at least one song of each genre across all songs in the database on a single album.
+    <br><br>
+    <button id="runDivision">Run Division Query</button>
+    <br><br>
+    <div id="divisionMsg"></div>
+    <div>
+        <table id="divisionTable" border="1">
+            <thead>
+            <tr>
+                <th>Artist</th>
+
+
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Song Searcher</h2>
+    <div id="selectionForm">
+        <div class="condition">
+            <select name="attribute" class="attribute">
+                <option value="releaseDate">Release Date (YYYY-MM-DD)</option>
+                <option value="duration">Length (seconds)</option>
+                <option value="genre">Genre</option>
+                <option value="stageName">Artist</option>
+            </select>
+            <select name="operator" class="operator">
+                <option value="=">=</option>
+                <option value="<"><</option>
+                <option value=">">></option>
+            </select>
+            <input type="text" name="value" class="value" placeholder="Enter value">
+            <p>Please select an option below if more than one condition applies</p>
+            <select name="logicalOperator" class="logicalOperator">
+                <option value=""></option>
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+            </select>
+        </div>
+        <button id="addCondition">Add Condition</button>
+        <button id="submitQuery">Run Query</button>
+    </div>
+    <div id="errorMessages" style="color: red; margin-top: 10px;"></div>
+    <div id="queryResults"></div>
+
+    <div>
+        <table id="selectionTable" border="1">
+            <thead>
+            <tr>
+                <th>ISRC</th>
+                <th>Title</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Duration (seconds)</th>
+                <th>Artist</th>
+                <th>Recording Date</th>
+                <th>Studio</th>
+                <th>Location</th>
+                <th>UPC</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="selectionResultMsg"></p>
+    </div>
+
+
+    
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> A better look at contract details</h2>
+    <form id="joinTable" >
+        <p>View the artist name and salary based on the contract type</p>
+        <label for="contractKey">Select a contract type:</label>
+        <select id="contractKey" name="whereValue" onchange="handleSelection(event)">
+        </select>
+        <button type="submit"> submit </button> <br>
+        <div id="joinResultMsg"></div>
+            
+            <script>
+                function createDropDownValues(data) {
+                const element = document.getElementById('contractKey');
+                element.innerHTML='';
+
+                
+                    data.forEach(contractType => {
+                        const option = document.createElement('option');
+                        option.value = contractType;
+                        option.textContent = contractType;
+                        element.appendChild(option)
+                
+                        });
+                
+                }
+
+                function handleSelection(event) {
+                const selectedValue = event.target.value;
+            
+        }
+            </script>
+    </form>
+    
+
+
+    <h2>Results</h2>
+    <table id="jointabletable" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>Stage Name</th>
+                <th>Compensation</th>
+        
+            </tr> 
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+   
+    <p>Warning: clicking below will reset the Record Label, Artist, and Contract tables</p>
+    <button id="resetDemotable"> reset </button> <br>
+    <!-- A placeholder to display messages related to the reset operation. -->
+    <div id="resetResultMsg"></div>
+>>>>>>> Stashed changes
     
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
