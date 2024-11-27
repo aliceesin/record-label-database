@@ -382,10 +382,16 @@ async function runGroupBy() {
     console.log("responseData", responseData);
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        console.log(responseData);
-        console.log(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("groupByTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
@@ -401,11 +407,23 @@ async function runHaving() {
     const responseData = await response.json();
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("havingTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
+
+
+
+
 
 }
 
@@ -418,8 +436,16 @@ async function runNestedGroupBy() {
     const responseData = await response.json();
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("nestedGroupByTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
@@ -435,69 +461,148 @@ async function runDivision() {
     const responseData = await response.json();
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("divisionTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
 
 }
-
 async function runSelection(event) {
     event.preventDefault();
+
     const conditionBlocks = document.querySelectorAll(".condition");
     const conditions = [];
-
-    conditionBlocks.forEach((block, index) => {
-        const column = block.querySelector(".attribute").value;
-        const operator = block.querySelector(".operator").value;
-        const value = block.querySelector(".value").value.trim();
-        const logicalOperator = index < conditionBlocks.length - 1 ? block.querySelector(".logicalOperator").value : null;
-
-        if (column && operator && value) {
-            conditions.push({column, operator, value, logicalOperator});
-        } else {
-            console.error("Please fill out all fields!");
-        }
-    })
+    const messageElement = document.getElementById("selectionResultMsg");
+    messageElement.textContent = ""; // Clear any previous messages
 
     try {
+        conditionBlocks.forEach((block, index) => {
+            const column = block.querySelector(".attribute").value;
+            const operator = block.querySelector(".operator").value;
+            const value = block.querySelector(".value").value.trim();
+            const logicalOperator = index < conditionBlocks.length - 1
+                ? block.querySelector(".logicalOperator").value
+                : null;
+
+            if (column && operator && value) {
+                conditions.push({ column, operator, value, logicalOperator });
+            }
+
+
+            if (conditions.length > 1) {
+                const logicalOperatorCount = conditions.filter(cond => cond.logicalOperator).length;
+                if (logicalOperatorCount < conditions.length - 1) {
+                    throw new Error("Missing AND/OR!");
+                }
+            }
+
+
+            if (!column || !operator || !value) {
+                throw new Error("Please fill out all fields!");
+            }
+        });
+
+
         const response = await fetch("/selection", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({attributes: conditions}),
+            body: JSON.stringify({ attributes: conditions }),
         });
 
         const responseData = await response.json();
-        const messageElement = document.getElementById("selectionResultMsg");
 
-        if (responseData) {
-            messageElement.textContext = "Success!";
+        if (responseData && responseData.data.length > 0) {
+            messageElement.textContent = "Success!";
             const tableElement = document.getElementById("selectionTable");
             const tableBody = tableElement.querySelector("tbody");
-
-            const resultData = responseData.data;
 
             if (tableBody) {
                 tableBody.innerHTML = "";
             }
 
-            mapDataToTable(resultData, tableBody);
+            mapDataToTable(responseData.data, tableBody);
         } else {
-            messageElement.textContext = "error: query failed!";
+            messageElement.textContent = "No results found.";
         }
     } catch (err) {
         console.error("Error occurred:", err);
-        const messageElement = document.getElementById("selectionResultMsg");
-        messageElement.textContent = `Error: ${err.message}`;
+        messageElement.textContent = err.message || "An error occurred.";
     }
-
-
-
-
 }
+
+
+// async function runSelection(event) {
+//     event.preventDefault();
+//     const conditionBlocks = document.querySelectorAll(".condition");
+//     const conditions = [];
+//     const messageElement = document.getElementById("selectionResultMsg");
+//
+//     conditionBlocks.forEach((block, index) => {
+//         const column = block.querySelector(".attribute").value;
+//         const operator = block.querySelector(".operator").value;
+//         const value = block.querySelector(".value").value.trim();
+//         const logicalOperator = index < conditionBlocks.length - 1 ? block.querySelector(".logicalOperator").value : null;
+//
+//         if (column && operator && value) {
+//             conditions.push({column, operator, value, logicalOperator});
+//         } if (conditions.length > 1) {
+//             const logicalOperatorCount = conditions.filter(cond => cond.logicalOperator !== null).length;
+//             if (logicalOperatorCount < conditions.length - 1) {
+//                 messageElement.textContent = "Missing AND/OR!";
+//                 }
+//
+//         } else {
+//             messageElement.textContent = "Please fill out all fields!";
+//         }
+//     })
+//
+//     try {
+//         const response = await fetch("/selection", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({attributes: conditions}),
+//         });
+//
+//         const responseData = await response.json();
+//         const resultData = responseData.data;
+//
+//
+//
+//         if (resultData && resultData.length > 0) {
+//             messageElement.textContent = "Success!";
+//             const tableElement = document.getElementById("selectionTable");
+//             const tableBody = tableElement.querySelector("tbody");
+//
+//             // const resultData = responseData.data;
+//
+//             if (tableBody) {
+//                 tableBody.innerHTML = "";
+//             }
+//
+//             mapDataToTable(resultData, tableBody);
+//         } else {
+//             messageElement.textContent = "No results!";
+//         }
+//     } catch (err) {
+//         console.error("Error occurred:", err);
+//         const messageElement = document.getElementById("selectionResultMsg");
+//         messageElement.textContent = `Error: ${err.message}`;
+//     }
+//
+// }
 
 function addCondition() {
     const form = document.getElementById("selectionForm");

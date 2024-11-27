@@ -167,8 +167,10 @@ async function selection(attributes) {
 
                 if (column === "releaseDate") {
                     conditions.push(`${column} ${operator} TO_DATE(:${paramName}, 'YYYY-MM-DD')`);
-                } else {
+                } else if (column === "duration") {
                     conditions.push(`${column} ${operator} :${paramName}`);
+                } else {
+                    conditions.push(`UPPER(${column}) ${operator} UPPER(:${paramName})`);
                 }
                 params[paramName] = value;
 
@@ -428,10 +430,11 @@ async function groupBy() {
     return await withOracleDB(async (connection) => {
         try {
             const result = await connection.execute(
-                `SELECT stageName, MIN(numTracks)
-                 FROM Album 
-                 WHERE professionalName = 'Jack Antonoff'
-                 GROUP BY stageName`
+                `SELECT stageName, title, MIN(numTracks)
+FROM Album 
+WHERE professionalName = 'Jack Antonoff'
+GROUP BY stageName, title 
+`
             );
             console.log(result.rows);
             return result.rows;
