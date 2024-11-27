@@ -482,10 +482,11 @@ async function groupBy() {
     return await withOracleDB(async (connection) => {
         try {
             const result = await connection.execute(
-                `SELECT stageName, MIN(numTracks)
-                 FROM Album 
-                 WHERE professionalName = 'Jack Antonoff'
-                 GROUP BY stageName`
+                `SELECT stageName, title, MIN(numTracks)
+FROM Album 
+WHERE professionalName = 'Jack Antonoff'
+GROUP BY stageName, title 
+`
             );
             console.log(result.rows);
             return result.rows;

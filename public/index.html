@@ -255,7 +255,7 @@
             <thead>
             <tr>
                 <th>Artist</th>
-                <th>Number of Tracks</th>
+                <th>Number of Albums</th>
 
             </tr>
             </thead>
@@ -272,7 +272,8 @@
             <thead>
             <tr>
                 <th>Artist</th>
-                <th>Number of Albums</th>
+                <th>Album</th>
+                <th>Number of Tracks</th>
 
             </tr>
             </thead>
@@ -281,15 +282,17 @@
     </div>
 
     <br><hr><br> <!-- ========================================================================= -->
+    Find the names and average number of tracks per album for producers who have a higher than average number of tracks per album across all albums in the database.
+    <br><br>
+    <button id="runNestedGroupBy" >Run Nested GROUP BY Query</button>
 
-    <button id="runNestedGroupBy">Run Nested GROUP BY Query</button>
     <div id="nestedGroupByMsg"></div>
     <div>
         <table id="nestedGroupByTable" border="1">
             <thead>
             <tr>
                 <th>Artist</th>
-                <th>Number of Albums</th>
+                <th>Average Number of Tracks</th>
 
             </tr>
             </thead>
@@ -300,13 +303,14 @@
     <br><hr><br> <!-- ========================================================================= -->
 
     <button id="runDivision">Run Division Query</button>
+    Find all artists that have at least one song of each genre across all songs in the database on a single album.
     <div id="divisionMsg"></div>
     <div>
         <table id="divisionTable" border="1">
             <thead>
             <tr>
                 <th>Artist</th>
-                <th>Number of Albums</th>
+
 
             </tr>
             </thead>
