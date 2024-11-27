@@ -112,11 +112,9 @@ async function joinTable(event) {
                 whereValue: whereValue
             })
         });
-        console.log("r", response);
         const responseData = await response.json();
         const messageElement = document.getElementById('joinResultMsg');
     
-        console.log("resp data join", responseData);
         if (responseData) {
             messageElement.textContent = "Success!";
             const tableElement = document.getElementById('jointabletable');
@@ -188,6 +186,7 @@ async function updateWritesContract(event) {
     const keyValue = document.querySelector('select[name="updateKeys"]').value;
     const oldValue = document.getElementById('oldValue').value;
     const newValue = document.getElementById('newValue').value;
+    const contractIDValue = document.getElementById("contractID-u").value;
 
     
     const response = await fetch('/update-writescontract', {
@@ -196,6 +195,7 @@ async function updateWritesContract(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            contractID: contractIDValue,
             key: keyValue,
             oldValue: oldValue,
             newValue: newValue
@@ -207,7 +207,7 @@ async function updateWritesContract(event) {
 
     if (responseData.success) {
         messageElement.textContent = "Values updated successfully!";
-        fetchTableData();
+        fetchAndDisplayContract();
     } else {
         messageElement.textContent = "Error updating values!";
     }

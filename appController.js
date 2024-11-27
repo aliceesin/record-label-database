@@ -19,7 +19,6 @@ router.delete('/deletetable', async (req, res) => {
     const {key, value} = req.body;
     try {
         const tableContent = await appService.deleteFromTable(key, value);
-        console.log("tb", tableContent);
         if (tableContent > 0) {
             res.status(200).json({ 
                 success: true,  
@@ -55,16 +54,9 @@ router.get('/contractdata', async (req, res) => {
     res.json({data: tableContent});
 });
 
-// router.get('/demotable', async (req, res) => {
-//     const tableContent = await appService.fetchDemotableFromDb();
-//     res.json({data: tableContent});
-// });
-
 router.post('/demotable', async (req, res) => {
     const tableName = req.body.tableName;
-    console.log("table name", tableName);
     const tableContent = await appService.fetchDemotableFromDb(tableName);
-    console.log("tablecontent", tableContent);
     res.json({data: tableContent});
 });
 
@@ -169,8 +161,8 @@ router.post("/insert-writescontract", async (req, res) => {
 });
 
 router.post("/update-writescontract", async (req, res) => {
-    const { key, oldValue, newValue } = req.body;
-    const updateResult = await appService.updateWritesContract(key, oldValue, newValue);
+    const { contractID, key, oldValue, newValue } = req.body;
+    const updateResult = await appService.updateWritesContract(contractID, key, oldValue, newValue);
     console.log("update result", updateResult);
     if (updateResult) {
         res.json({ success: true });

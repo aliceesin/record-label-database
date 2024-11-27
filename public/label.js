@@ -104,6 +104,7 @@ async function deleteFromTable(event) {
 
     if (responseData.success) {
         messageElement.textContent = "Data deleted successfully!";
+        fetchAndDisplay();
     } else {
         messageElement.textContent = "Delete was unsuccessful!";
     }

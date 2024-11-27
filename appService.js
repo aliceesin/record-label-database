@@ -103,13 +103,11 @@ async function testOracleConnection() {
 async function projectFromTable(keys) {
     return await withOracleDB(async (connection) => {
         let columns;
-        console.log("keys", keys);
         if (Array.isArray(keys)) {
             columns = keys.join(',');
         } else {
             columns = keys;
         }
-        console.log("columns", columns);
         const query = `SELECT ${columns} FROM WritesContract2`;
         const result = await connection.execute(query);
         return result.rows;
@@ -197,6 +195,10 @@ async function selection(attributes) {
 
 
 async function deleteFromTable(key, value) {
+    const validKeys = ['labelName', 'contractID', 'stageName'];
+    if (!validKeys.includes(key)) {
+        throw new Error('Invalid column name.');
+    }
     return await withOracleDB(async (connection) => {
         const query = `DELETE FROM RecordLabel WHERE ${key} = :value`;
         const result = await connection.execute(query, { value }, 
@@ -425,13 +427,21 @@ async function insertDemotable(legalName, dateOfBirth, stageName) {
  * Only start date and end date was implemented for update as all the other
  * attributes were foreign keys that cascades on update (stageName, labelName, type)
  */
-async function updateWritesContract(key, oldValue, newValue) {
+async function updateWritesContract(contractID, key, oldValue, newValue) {
+    const validKeys = ['startDate', 'endDate', 'labelName', 'stageName', 'type']; 
+    
+    if (!validKeys.includes(key)) {
+        throw new Error("Invalid key provided.");
+    }
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `UPDATE WritesContract2 
              SET ${key} = TO_DATE(:newValue, 'YYYY-MM-DD') 
-             WHERE ${key} = TO_DATE(:oldValue, 'YYYY-MM-DD')`,
-            [newValue, oldValue],
+             WHERE ${key} = TO_DATE(:oldValue, 'YYYY-MM-DD') AND contractID = :contractID`,
+            {   newValue: newValue,
+                oldValue: oldValue,
+                contractID: contractID
+            },
             { autoCommit: true }
         );
 
