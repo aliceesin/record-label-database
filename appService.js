@@ -42,17 +42,14 @@ const dbConfig = {
 async function initializeConnectionPool() {
     try {
         await oracledb.createPool(dbConfig);
-        console.log('Connection pool started');
     } catch (err) {
         console.error('Initialization error: ' + err.message);
     }
 }
 
 async function closePoolAndExit() {
-    console.log('\nTerminating');
     try {
         await oracledb.getPool().close(10); // 10 seconds grace period for connections to finish
-        console.log('Pool closed');
         process.exit(0);
     } catch (err) {
         console.error(err.message);
@@ -101,11 +98,19 @@ async function testOracleConnection() {
 }
 
 async function projectFromTable(keys) {
+    const validColumns = ['contractID', 'type', 'stageName', 'labelName', 'startDate', 'endDate'];
     return await withOracleDB(async (connection) => {
         let columns;
         if (Array.isArray(keys)) {
-            columns = keys.join(',');
+            const sanitizedKeys = keys.filter((key) => validColumns.includes(key));
+            if (sanitizedKeys.length === 0) {
+                throw new Error('Invalid column names provided');
+            }
+            columns = sanitizedKeys.join(',');
         } else {
+            if (!validColumns.includes(keys)) {
+                throw new Error('Invalid column name provided');
+            }
             columns = keys;
         }
         const query = `SELECT ${columns} FROM WritesContract2`;
@@ -152,8 +157,6 @@ async function fetchContractTypes() {
 
 // select 
 async function selection(attributes) {
-    console.log("testing");
-
     try {
         return await withOracleDB(async (connection) => {
             const conditions = [];
@@ -183,7 +186,6 @@ async function selection(attributes) {
                 FROM Song
                 WHERE ${newAttributes}`;
 
-            console.log(query);
             const result = await connection.execute(query, params);
             return result.rows;
         });
@@ -195,7 +197,7 @@ async function selection(attributes) {
 
 
 async function deleteFromTable(key, value) {
-    const validKeys = ['labelName', 'contractID', 'stageName'];
+    const validKeys = ['labelName', 'yearEstablished'];
     if (!validKeys.includes(key)) {
         throw new Error('Invalid column name.');
     }
@@ -208,15 +210,6 @@ async function deleteFromTable(key, value) {
         return 0;
     })
 }
-
-// async function fetchDemotableFromDb() {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute('SELECT * FROM ArtistSigns1');
-//         return result.rows;
-//     }).catch(() => {
-//         return [];
-//     });
-// }
 
 async function fetchDemotableFromDb(tableName) {
     if (!allowedTableNames.includes(tableName)) {
@@ -272,7 +265,6 @@ async function insertArtist2(stageName, legalName) {
                 { stageName: stageName, legalName: legalName },
                 { autoCommit: true }
             );
-            console.log(`Successfully inserted into Artist2`);
             return "success"
         } catch (error) {
             if (error.errorNum === 1) { 
@@ -293,8 +285,6 @@ async function insertRecordLabel(labelName, yearEstablished) {
                             { labelName: labelName, yearEstablished: yearEstablished },
                             { autoCommit: true }
                         );
-                        
-                        console.log(`Successfully inserted into RecordLabel`);
                         return "success";
                 } catch (error) {
                     if (error.errorNum === 1) { 
@@ -315,13 +305,11 @@ async function insertWritesContract1(type, stageName, compensation) {
                 { type: type, stageName: stageName, compensation: compensation },
                 { autoCommit: true }
             );
-            console.log(`Successfully inserted into WritesContract1`);
             return "success";  
         } catch (error) {
             if (error.errorNum === 1) {
                 return "duplicate";  
             } else if (error.errorNum === 2291) {
-                console.log(`Foreign key constraint violated: Parent contractID not found`);
                 return "parentKeyNotFound";  
             } else {
                 console.error('Unexpected Error:', error);  
@@ -348,13 +336,11 @@ async function insertWritesContract2 (contractID, type, stageName, labelName, st
                  },
                 { autoCommit: true }
             );
-            console.log(`Successfully inserted into WritesContract2`);
             return "success"
         } catch (error) {
             if (error.errorNum === 1) {
                 return "duplicate";  
             } else if (error.errorNum === 2291) {  
-                console.log(`Foreign key constraint violated: Parent contractID not found 2`);
                 return "parentKeyNotFound";
             } else {
                 console.error('Error in WritesContract2:', error);
@@ -368,7 +354,6 @@ async function insertWritesContract(type, compensation, contractID, stageName, l
     try {
 
         const e1InsertResult = await insertWritesContract1(type, stageName, compensation);
-        console.log("write contract 1 result: ", e1InsertResult);
 
         if (e1InsertResult === "duplicate") {
             return { status: "duplicate", table: "WritesContract1" };
@@ -379,7 +364,6 @@ async function insertWritesContract(type, compensation, contractID, stageName, l
         }
 
         const e2InsertResult = await insertWritesContract2(contractID, type, stageName, labelName, startDate, endDate);
-        console.log("write contract 2 result: ", e2InsertResult); 
 
         if (e2InsertResult === "duplicate") {  
             return { status: "duplicate", table: "WritesContract2" };
@@ -423,9 +407,11 @@ async function insertDemotable(legalName, dateOfBirth, stageName) {
 
 /* UPDATE */
 /** We are using Oracle as our DBMS so it cannot compute ON UPDATE CASCADE
- * However, this relation has a UNIQUE constraint and has multiple Foreign Keys 
+ * However, this relation has a UNIQUE constraint and has multiple foreign Keys 
  * Only start date and end date was implemented for update as all the other
- * attributes were foreign keys that cascades on update (stageName, labelName, type)
+ * attributes were foreign keys that cascades on update (stageName, labelName, type).
+ * ON UPDATE CASCADE statements were taken out of the script for valid table creation
+ * in Oracle.
  */
 async function updateWritesContract(contractID, key, oldValue, newValue) {
     const validKeys = ['startDate', 'endDate', 'labelName', 'stageName', 'type']; 
@@ -461,7 +447,7 @@ WHERE numTracks <15
 GROUP BY stageName, professionalName
 ORDER BY stageName`
             );
-            console.log(result.rows);
+
             return result.rows;
         } catch (error) {
             console.error("Error in GROUP BY", error);
