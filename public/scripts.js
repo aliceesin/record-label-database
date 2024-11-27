@@ -388,10 +388,16 @@ async function runGroupBy() {
     console.log("responseData", responseData);
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        console.log(responseData);
-        console.log(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("groupByTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
@@ -407,11 +413,23 @@ async function runHaving() {
     const responseData = await response.json();
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("havingTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
+
+
+
+
 
 }
 
@@ -424,8 +442,16 @@ async function runNestedGroupBy() {
     const responseData = await response.json();
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("nestedGroupByTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
@@ -441,8 +467,16 @@ async function runDivision() {
     const responseData = await response.json();
 
     if (responseData.success) {
-        const result = JSON.stringify(responseData.data);
-        messageElement.textContent = `Query Results: \n${result}`;
+        const tableElement = document.getElementById("divisionTable");
+        const tableBody = tableElement.querySelector("tbody");
+
+        const resultData = responseData.data;
+
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
+
+        mapDataToTable(resultData, tableBody);
     } else {
         alert("Error!");
     }
