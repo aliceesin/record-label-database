@@ -425,13 +425,16 @@ INSERT INTO Song VALUES ('USUM72019412', 'Positions', TO_DATE('2020-10-30', 'YYY
 INSERT INTO Song VALUES ('USAT21602944', '24K Magic', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Funk', 225, 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
 INSERT INTO Song VALUES ('USAT21602945', 'Versace on the Floor', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Pop', 241, 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
 INSERT INTO Song VALUES ('USAT21602946', 'Finesse', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Alternative', 190, 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
-INSERT INTO Song VALUES ('USUM72004304', 'Rain on Me', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 182, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
 INSERT INTO Song VALUES ('USUM72105934', 'Your Power', TO_DATE('2021-07-30', 'YYYY-MM-DD'), 'Alternative', 245, 'Billie Eilish', TO_DATE('2021-05-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 602438241644);
 INSERT INTO Song VALUES ('USUM72210694', 'Read Your Mind', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 207, 'Sabrina Carpenter', TO_DATE('2021-06-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72200377', 'Fast Times', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 174, 'Sabrina Carpenter', TO_DATE('2021-07-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72114679', 'Skinny Dipping', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 177, 'Sabrina Carpenter', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72301876', 'Feather', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Funk', 185, 'Sabrina Carpenter', TO_DATE('2021-09-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72210708', 'Nonsense', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Alternative', 163, 'Sabrina Carpenter', TO_DATE('2021-10-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUM72004304', 'Rain on Me', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 182, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
+INSERT INTO Song VALUES ('USUM72004305', 'Alice', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Funk', 177, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
+INSERT INTO Song VALUES ('USUM72004306', 'Sour Candy', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Alternative', 152, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
+INSERT INTO Song VALUES ('USUM72004307', 'Replay', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 186, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
 
 INSERT INTO Single VALUES ('USUG12004699', 500000);
 INSERT INTO Single VALUES ('USUM72019412', 1200000);
