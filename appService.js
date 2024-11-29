@@ -197,7 +197,7 @@ async function selection(attributes) {
 
 
 async function deleteFromTable(key, value) {
-    const validKeys = ['labelName', 'yearEstablished'];
+    const validKeys = ['labelName'];
     if (!validKeys.includes(key)) {
         throw new Error('Invalid column name.');
     }
