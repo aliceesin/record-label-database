@@ -84,62 +84,6 @@ async function projectTable(event) {
         }  
 }
 
-async function fetchDropDownTable() {
-    const contractData = await fetch("/contractdata", {
-        method: 'GET'
-    });
-
-    const contractDataObject = await contractData.json();
-    console.log("contract", contractDataObject.data);
-    const contractDataArray = contractDataObject.data;
-
-    createDropDownValues(contractDataArray);
-}
-
-async function joinTable(event) {
-    event.preventDefault();
-
-    const whereValue = document.querySelector('select[name="whereValue"]').value;
-    console.log("where value", whereValue);
-    try {
-
-        const response = await fetch("/jointable", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                whereValue: whereValue
-            })
-        });
-        const responseData = await response.json();
-        const messageElement = document.getElementById('joinResultMsg');
-    
-        if (responseData) {
-            messageElement.textContent = "Success!";
-            const tableElement = document.getElementById('jointabletable');
-            const tableBody = tableElement.querySelector('tbody');
-        
-            const demotableContent = responseData.data;
-        
-            // Always clear old, already fetched data before new fetching process.
-            if (tableBody) {
-                tableBody.innerHTML = '';
-            }
-        
-            mapDataToTable(demotableContent, tableBody);
-            
-        } else {
-            messageElement.textContent = "Error processing data!";
-        }
-    } catch (err) {
-            console.error("Error occurred:", err);
-            const messageElement = document.getElementById('joinResultMsg');
-            messageElement.textContent = `Error Processing data: ${err.message}`;
-        
-    }
-    
-}
 
 async function insertWritesContract(event) {
     event.preventDefault();
@@ -218,9 +162,8 @@ window.onload = function() {
     fetchAndDisplayContract();
     document.getElementById("insertWritesContract").addEventListener("submit", insertWritesContract);
     document.getElementById("projectTable").addEventListener("submit", projectTable);
-    document.getElementById("joinTable").addEventListener("submit", joinTable);
     document.getElementById("updateWritesContract").addEventListener("submit", updateWritesContract);
 
-    fetchDropDownTable();
+
 
 }

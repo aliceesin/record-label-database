@@ -86,8 +86,68 @@ async function fetchAndDisplayUsers() {
 
 
 
+async function fetchDropDownTable() {
+    const contractData = await fetch("/contractdata", {
+        method: 'GET'
+    });
+
+    const contractDataObject = await contractData.json();
+    console.log("contract", contractDataObject.data);
+    const contractDataArray = contractDataObject.data;
+
+    createDropDownValues(contractDataArray);
+}
+
+async function joinTable(event) {
+    event.preventDefault();
+
+    const whereValue = document.querySelector('select[name="whereValue"]').value;
+    console.log("where value", whereValue);
+    try {
+
+        const response = await fetch("/jointable", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                whereValue: whereValue
+            })
+        });
+        const responseData = await response.json();
+        const messageElement = document.getElementById('joinResultMsg');
+
+        if (responseData) {
+            messageElement.textContent = "Success!";
+            const tableElement = document.getElementById('jointabletable');
+            const tableBody = tableElement.querySelector('tbody');
+
+            const demotableContent = responseData.data;
+
+            // Always clear old, already fetched data before new fetching process.
+            if (tableBody) {
+                tableBody.innerHTML = '';
+            }
+
+            mapDataToTable(demotableContent, tableBody);
+
+        } else {
+            messageElement.textContent = "Error processing data!";
+        }
+    } catch (err) {
+        console.error("Error occurred:", err);
+        const messageElement = document.getElementById('joinResultMsg');
+        messageElement.textContent = `Error Processing data: ${err.message}`;
+
+    }
+
+}
+
+
 
 window.onload = function() {
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     fetchAndDisplayUsers();
+    fetchDropDownTable();
+    document.getElementById("joinTable").addEventListener("submit", joinTable);
 };

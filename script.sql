@@ -296,6 +296,14 @@ INSERT INTO Concert2 VALUES ('Little Caesars Arena', TO_DATE('2022-03-12', 'YYYY
 INSERT INTO Concert2 VALUES ('Pacific Coliseum', TO_DATE('2024-11-04', 'YYYY-MM-DD'), 15500);
 INSERT INTO Concert2 VALUES ('United Center', TO_DATE('2023-07-05', 'YYYY-MM-DD'), 18000);
 
+INSERT INTO Concert2 VALUES ('Lumen Field', TO_DATE('2024-02-22', 'YYYY-MM-DD'), 61500);
+INSERT INTO Concert2 VALUES ('Staples Center', TO_DATE('2021-06-06', 'YYYY-MM-DD'), 14500);
+INSERT INTO Concert2 VALUES ('Hyde Park', TO_DATE('2011-02-14', 'YYYY-MM-DD'), 61000);
+INSERT INTO Concert2 VALUES ('Dodgers Stadium', TO_DATE('2021-03-11', 'YYYY-MM-DD'), 62000);
+INSERT INTO Concert2 VALUES ('Little Caesars Arena', TO_DATE('2020-03-11', 'YYYY-MM-DD'), 11500);
+INSERT INTO Concert2 VALUES ('Pacific Coliseum', TO_DATE('2015-12-04', 'YYYY-MM-DD'), 15000);
+INSERT INTO Concert2 VALUES ('United Center', TO_DATE('2013-06-06', 'YYYY-MM-DD'), 16500);
+
 INSERT INTO EmploysEmployee3 VALUES ('E123', 'Harry Potter', '111-223-333', TO_DATE('2021-06-12', 'YYYY-MM-DD'), 'Sony Music', 'Manager');
 INSERT INTO EmploysEmployee3 VALUES ('E124', 'Hermione Granger', '222-334-444', TO_DATE('2019-05-30', 'YYYY-MM-DD'), 'Warner Bros', 'Producer');
 INSERT INTO EmploysEmployee3 VALUES ('E125', 'Ron Weasley', '333-445-555', TO_DATE('2020-11-21', 'YYYY-MM-DD'), 'Universal Music', 'Engineer');
@@ -335,7 +343,7 @@ INSERT INTO ArtistSigns2 VALUES ('Sabrina Carpenter', 'Sabrina Carpenter');
 
 INSERT INTO WritesContract2 VALUES ('C101', 'Exclusive', 'Taylor Swift', 'Republic Records', TO_DATE('2018-01-01', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
 INSERT INTO WritesContract2 VALUES ('C102', 'Non-Exclusive', 'Ariana Grande', 'Republic Records', TO_DATE('2017-01-01', 'YYYY-MM-DD'), TO_DATE('2022-12-31', 'YYYY-MM-DD'));
-INSERT INTO WritesContract2 VALUES ('C103', 'Single-Album Deal', 'Bruno Mars', 'Atlantic Records', TO_DATE('2020-01-01', 'YYYY-MM-DD'), NULL);
+INSERT INTO WritesContract2 VALUES ('C103', 'Single-Album Deal', 'Bruno Mars', 'Atlantic Records', TO_DATE('2020-01-01', 'YYYY-MM-DD'), TO_DATE('2025-12-31', 'YYYY-MM-DD'));
 INSERT INTO WritesContract2 VALUES ('C104', 'Multi-Album Deal', 'Lady Gaga', 'Interscope Records', TO_DATE('2019-01-01', 'YYYY-MM-DD'), TO_DATE('2025-12-31', 'YYYY-MM-DD'));
 INSERT INTO WritesContract2 VALUES ('C105', 'Tour Support', 'Billie Eilish', 'Interscope Records', TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'));
 INSERT INTO WritesContract2 VALUES ('C106', 'Tour Support', 'Sabrina Carpenter', 'Hollywood Records', TO_DATE('2022-01-02', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
@@ -400,8 +408,8 @@ INSERT INTO Studio VALUES ('Clear Lake Recording Studios', 'LA', 500);
 INSERT INTO Studio VALUES ('Electro-Vox', 'LA', 720);
 INSERT INTO Studio VALUES ('Paramount Recording Studios', 'LA', 1500);
 INSERT INTO Studio VALUES ('Sunset Sound', 'NY', 600);
-INSERT INTO Studio VALUES ('Studio6', 'Hensen Recording Studios', 650);
-INSERT INTO Studio VALUES ('Studio7', 'Miami Recording Studios', 823);
+INSERT INTO Studio VALUES ('Miami Recording Studio', 'Miami', 650);
+INSERT INTO Studio VALUES ('House of Hits', 'Miami', 823);
 
 INSERT INTO Album VALUES (602435648583, 'Max Martin', 'Taylor Swift', 'Evermore', 15, '01:01:00', TO_DATE('2020-12-11', 'YYYY-MM-DD'), 2000000);
 INSERT INTO Album VALUES (602435034881, 'Jack Antonoff', 'Taylor Swift', 'Folklore', 15, '01:03:29', TO_DATE('2020-07-24', 'YYYY-MM-DD'), 2300000);
@@ -426,15 +434,15 @@ INSERT INTO Song VALUES ('USAT21602944', '24K Magic', TO_DATE('2016-11-18', 'YYY
 INSERT INTO Song VALUES ('USAT21602945', 'Versace on the Floor', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Pop', 241, 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
 INSERT INTO Song VALUES ('USAT21602946', 'Finesse', TO_DATE('2016-11-18', 'YYYY-MM-DD'), 'Alternative', 190, 'Bruno Mars', TO_DATE('2016-10-20', 'YYYY-MM-DD'), 'Electro-Vox', 'LA', 075678662737);
 INSERT INTO Song VALUES ('USUM72105934', 'Your Power', TO_DATE('2021-07-30', 'YYYY-MM-DD'), 'Alternative', 245, 'Billie Eilish', TO_DATE('2021-05-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 602438241644);
-INSERT INTO Song VALUES ('USUM72210694', 'Read Your Mind', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 207, 'Sabrina Carpenter', TO_DATE('2021-06-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
-INSERT INTO Song VALUES ('USUM72200377', 'Fast Times', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 174, 'Sabrina Carpenter', TO_DATE('2021-07-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
+INSERT INTO Song VALUES ('USUM72210694', 'Read Your Mind', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 207, 'Sabrina Carpenter', TO_DATE('2021-06-10', 'YYYY-MM-DD'), 'Miami Recording Studio', 'Miami', 093624839842);
+INSERT INTO Song VALUES ('USUM72200377', 'Fast Times', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 174, 'Sabrina Carpenter', TO_DATE('2021-07-10', 'YYYY-MM-DD'), 'Miami Recording Studio', 'Miami', 093624839842);
 INSERT INTO Song VALUES ('USUM72114679', 'Skinny Dipping', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Pop', 177, 'Sabrina Carpenter', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72301876', 'Feather', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Funk', 185, 'Sabrina Carpenter', TO_DATE('2021-09-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72210708', 'Nonsense', TO_DATE('2022-07-15', 'YYYY-MM-DD'), 'Alternative', 163, 'Sabrina Carpenter', TO_DATE('2021-10-10', 'YYYY-MM-DD'), 'Sunset Sound', 'NY', 093624839842);
 INSERT INTO Song VALUES ('USUM72004304', 'Rain on Me', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 182, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
 INSERT INTO Song VALUES ('USUM72004305', 'Alice', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Funk', 177, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
 INSERT INTO Song VALUES ('USUM72004306', 'Sour Candy', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Alternative', 152, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
-INSERT INTO Song VALUES ('USUM72004307', 'Replay', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 186, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'Paramount Recording Studios', 'LA', 00602508854064);
+INSERT INTO Song VALUES ('USUM72004307', 'Replay', TO_DATE('2020-05-29', 'YYYY-MM-DD'), 'Pop', 186, 'Lady Gaga', TO_DATE('2020-03-15', 'YYYY-MM-DD'), 'House of Hits', 'Miami', 00602508854064);
 
 INSERT INTO Single VALUES ('USUG12004699', 500000);
 INSERT INTO Single VALUES ('USUM72019412', 1200000);
@@ -455,6 +463,13 @@ INSERT INTO PerformsAt VALUES ('Bruno Mars', TO_DATE('2018-07-14', 'YYYY-MM-DD')
 INSERT INTO PerformsAt VALUES ('Lady Gaga', TO_DATE('2022-09-10', 'YYYY-MM-DD'), 'Dodgers Stadium');
 INSERT INTO PerformsAt VALUES ('Billie Eilish', TO_DATE('2022-03-12', 'YYYY-MM-DD'), 'Little Caesars Arena');
 INSERT INTO PerformsAt VALUES ('Sabrina Carpenter', TO_DATE('2024-11-04', 'YYYY-MM-DD'), 'Pacific Coliseum');
+
+INSERT INTO PerformsAt VALUES ('Taylor Swift', TO_DATE('2013-06-06', 'YYYY-MM-DD'), 'United Center');
+INSERT INTO PerformsAt VALUES ('Ariana Grande', TO_DATE('2015-12-04', 'YYYY-MM-DD'), 'Pacific Coliseum');
+INSERT INTO PerformsAt VALUES ('Bruno Mars', TO_DATE('2020-03-11', 'YYYY-MM-DD'), 'Little Caesars Arena');
+INSERT INTO PerformsAt VALUES ('Lady Gaga', TO_DATE('2011-02-14', 'YYYY-MM-DD'), 'Hyde Park');
+INSERT INTO PerformsAt VALUES ('Billie Eilish', TO_DATE('2021-06-06', 'YYYY-MM-DD'), 'Staples Center');
+INSERT INTO PerformsAt VALUES ('Sabrina Carpenter', TO_DATE('2024-02-22', 'YYYY-MM-DD'), 'Lumen Field');
 
 INSERT INTO IssueTicket2 VALUES ('D1201', 'FLR3', 1500);
 INSERT INTO IssueTicket2 VALUES ('F12302', 'B15', 250);

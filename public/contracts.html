@@ -156,17 +156,18 @@
                     });
                 }
 
-                function transformDate(input) {
-                    if (typeof input === "string" && Date.parse(input)) {
-                        const date = new Date(input)
-                        const formatDate = 
-                        `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
-                        return formatDate;
-                    } else {
+                    function transformDate(input) {
+                        const oracleDateFormat = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}\.\d{3}Z?)?$/;
+                        if (typeof input === "string" && oracleDateFormat.test(input)) {
+                            const date = new Date(input);
+                            if (!isNaN(date)) {
+                                const formatDate =
+                                    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+                                return formatDate;
+                            }
+                        }
                         return input;
                     }
-                }
                 </script>
         
             </tr>
@@ -175,55 +176,7 @@
         </tbody>
     </table>
 
-    <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> A better look at contract details</h2>
-    <form id="joinTable" >
-        <p>View the artist name and salary based on the contract type:</p>
-        <label for="contractKey">Select a contract type:</label>
-        <select id="contractKey" name="whereValue" onchange="handleSelection(event)">
-        </select>
-        <button type="submit"> submit </button> <br>
-        <div id="joinResultMsg"></div>
-            
-            <script>
-                function createDropDownValues(data) {
-                const element = document.getElementById('contractKey');
-                element.innerHTML='';
-
-                
-                    data.forEach(contractType => {
-                        const option = document.createElement('option');
-                        option.value = contractType;
-                        option.textContent = contractType;
-                        element.appendChild(option)
-                
-                        });
-                
-                }
-
-                function handleSelection(event) {
-                const selectedValue = event.target.value;
-            
-        }
-            </script>
-    </form>
-    
-
-
-    <h2>Results</h2>
-    <table id="jointabletable" border="1">
-        <thead>
-            <tr>
-                <!--Table head, need to be adjusted accordingly to align with your own.-->
-                <th>Stage Name</th>
-                <th>Compensation</th>
-        
-            </tr> 
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
 
 
     <!-- ===================================================================================== -->

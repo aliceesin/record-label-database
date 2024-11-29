@@ -131,10 +131,13 @@ It joins WritesContract1 and WritesContract2
 async function joinTable(whereValue) {
     return await withOracleDB(async (connection) => {
         const whereValueInput = whereValue;
-        const query = `SELECT w2.stageName, w1.compensation
-         FROM WritesContract1 w1, WritesContract2 w2
-         WHERE w1.type = w2.type
-         AND w1.type = :whereValueInput`
+        console.log(whereValue);
+        const query = `SELECT DISTINCT p.stageName, c.ticketsSold
+FROM PerformsAt p, Concert2 c
+WHERE p.concertVenue = c.concertVenue
+AND p.concertDate = c.concertDate
+AND p.concertVenue = :whereValueInput
+`
         const result = await connection.execute(query, {whereValueInput});
         return result.rows;
     }). catch(() => {
@@ -146,7 +149,7 @@ async function joinTable(whereValue) {
 async function fetchContractTypes() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `SELECT DISTINCT w1.type FROM WritesContract1 w1, WritesContract2 w2 WHERE w1.type = w2.type`);
+            `SELECT DISTINCT concertVenue FROM Concert2`);
         return result.rows;
     }).catch(() => {
         return [];
