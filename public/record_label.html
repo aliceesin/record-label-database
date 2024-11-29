@@ -45,25 +45,12 @@
 
     <h2> Delete a Record Label </h2>
     <form id="deleteFromTable" >
-        <label for="deleteKeys">Choose a Key:</label>
-        <select id="deleteKeys" name="deleteKey" onchange="updateDropdownId()">
-            <option value="labelName">Label Name</option>
-            <option value="yearEstablished">Year Established</option>
-        </select>
-        Value to delete: <input type="text" id="deleteValue" placeholder="Enter value to delete" required> <br><br>
+        <label for="deleteKeys">Choose a record label to delete</label>
+    
+        <input type="text" id="deleteValue" placeholder="Enter the record label name" required> <br><br>
 
         <button type="click"> delete </button> <br>
     </form>
-
-    <script>
-        function updateDropdownId() {
-            
-            const dropdown = document.getElementById('deleteKeys');
-            const selectedValue = dropdown.value;
-
-            dropdown.id = selectedValue;
-        }
-    </script>
     
     <div id="deleteResultMsg"></div>
 

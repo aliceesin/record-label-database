@@ -86,7 +86,7 @@ function mapDataToTable(demotableContent, tableBody) {
 async function deleteFromTable(event) {
     event.preventDefault();
 
-    const deleteKeyValue = document.querySelector('select[name="deleteKey"]').value;
+    const deleteKeyValue = 'labelName';
     const valValue = document.getElementById('deleteValue').value;
 
     const response = await fetch("/deletetable", {
