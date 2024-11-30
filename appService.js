@@ -124,9 +124,9 @@ async function projectFromTable(keys) {
 
 
 /* 
-** JOIN QUERY find the stageName and compensation 
-of all artists with the same type of contract type
-It joins WritesContract1 and WritesContract2
+** JOIN QUERY find the stageName and number of tickets sold
+for artists who have performed at the same concert venue.
+It joins PerformsAt and Concert2.
 */
 async function joinTable(whereValue) {
     return await withOracleDB(async (connection) => {
